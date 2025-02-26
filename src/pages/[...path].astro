@@ -1,0 +1,50 @@
+---
+import { render } from "astro:content";
+import Play from "../components/Play.astro";
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const pages = await getCollection("pages");
+  type ResultType = {
+    params: { path: string | undefined };
+    props: { page: (typeof pages)[number] };
+  }[];
+
+  const homePage = pages.find((page) => page.data.layout === "home");
+  const contentPages: ResultType = pages
+    .filter((page) => page.data.layout !== "home")
+    .map((page) => ({ params: { path: page.id }, props: { page } }));
+
+  return contentPages.concat(
+    homePage
+      ? [
+          {
+            params: { path: undefined },
+            props: { page: homePage },
+          },
+        ]
+      : []
+  );
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<Layout>
+  {
+    page.data.layout === "schedule" ? (
+      <Content />
+    ) : page.data.layout === "page" ? (
+      <Content />
+    ) : page.data.layout === "module" ? (
+      <Content />
+    ) : (
+      /* page.data.layout === "home" */ <Content />
+    )
+  }
+
+  <hr />
+  <Play />
+</Layout>
