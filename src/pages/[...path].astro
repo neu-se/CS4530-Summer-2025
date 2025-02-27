@@ -1,8 +1,8 @@
 ---
 import { render } from "astro:content";
-import Play from "../components/Play.astro";
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import Home from "../layouts/Home.astro";
 
 export async function getStaticPaths() {
   const pages = await getCollection("pages");
@@ -45,12 +45,9 @@ const { Content } = await render(page);
     ) : page.data.layout === "module" ? (
       <Content />
     ) : (
-      /* page.data.layout === "home" */ <Content />
+      /* page.data.layout === "home" */ <Home>
+        <Content />
+      </Home>
     )
   }
-
-  <hr />
-  {JSON.stringify(page)}
-  <hr />
-  <Play />
 </Layout>

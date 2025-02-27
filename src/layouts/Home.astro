@@ -1,0 +1,21 @@
+---
+
+---
+
+<>
+  <h1>
+    {import.meta.env.COURSE_NUMBER}, {import.meta.env.SEMESTER}: {
+      import.meta.env.COURSE_TITLE
+    }
+  </h1>
+  <article><slot /></article>
+</>
+
+<style>
+  h1 {
+    margin-block: 0.5em;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    font-weight: 300;
+  }
+</style>

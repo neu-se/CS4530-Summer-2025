@@ -2,72 +2,103 @@
 import { getCollection } from "astro:content";
 const pages = await getCollection("pages");
 
+// Filter out the home page and any pages that set the nav_exclude property
 const contentPages = pages
   .filter((page) => page.data.layout !== "home")
   .filter((page) => page.data.layout !== "page" || !page.data.nav_exclude);
 type Page = (typeof contentPages)[number];
 
-/* Collect contentPages into a section/subsection hierarchy */
-const sections: {
-  [section: string]: {
-    id: string;
-    nav_order?: number | undefined;
-    title: string;
-    page: null | Page;
-    subPages: null | Page[];
-  };
-} = {};
-for (const page of contentPages) {
-  // Get the top-level path and ensure it exists
-  const [first_, ...rest] = page.id.split("/");
-  const first = first_!; // First split always exists
-  if (!sections[first]) {
-    sections[first] = {
-      id: first!,
-      page: null,
-      title: first.replace(/^[a-z]/, (ch) => ch.toUpperCase()),
-      subPages: null,
-    };
-  }
-  const section = sections[first!]!;
-
-  if (rest.length === 0) {
-    section.nav_order = page.data.nav_order;
-    section.page = page;
-    section.title = page.data.title;
-  } else if (section.subPages === null) {
-    section.subPages = [page];
-  } else {
-    section.subPages.push(page);
-  }
-}
-
-/* Appropriately order the sections and subsections */
-const orderdSections = [...Object.values(sections)]
-  .map((section) => {
-    if (section.subPages !== null) {
-      section.subPages.sort(sortByNavOrderThenPath);
-    }
-    return section;
-  })
-  .toSorted(sortByNavOrderThenPath);
+const orderedSections = createOrderedSectionHierarchy(contentPages);
 
 /**
- * Sorting function for a record with nav_order and id fields
+ * Given pages returned from getCollection, return a two-level hierarchy,
+ * grouping the pages /foo/bar, /foo/baz, and /foo/etc underneath the
+ * page /foo (if a page /foo exists).
+ *
+ * WARNING: currently, if there are non-excluded pages like /foo/bar and
+ * there's no /foo page, there will still be a link to /foo which will result
+ * in a 404 error.
+ *
+ * @param pages Arbitrarily-ordered pages returned from getCollection
+ */
+function createOrderedSectionHierarchy(pages: Page[]): {
+  path: string;
+  title: string;
+  page: null | Page;
+  subPages: null | { path: string; title: string; page: Page }[];
+}[] {
+  const sectionMap: {
+    [section: string]: {
+      path: string;
+      nav_order?: number | undefined;
+      title: string;
+      page: null | Page;
+      subPages: null | { path: string; title: string; page: Page }[];
+    };
+  } = {};
+  for (const page of pages) {
+    // Get the top-level path and ensure it exists
+    const [first_, ...rest] = page.id.split("/");
+    const first = first_!; // First split always exists
+    if (!sectionMap[first]) {
+      // Create a top-level hierarchy item with default values
+      sectionMap[first] = {
+        path: first,
+        page: null,
+        title: first.replace(/^[a-z]/, (ch) => ch.toUpperCase()),
+        subPages: null,
+      };
+    }
+    const section = sectionMap[first]!; // If-statement ensured this exists
+
+    if (rest.length === 0) {
+      // This is the
+      section.nav_order = page.data.nav_order;
+      section.page = page;
+      section.title = page.data.title;
+    } else {
+      const title =
+        page.data.layout === "module"
+          ? `${page.data.nav_order} - ${page.data.title}`
+          : page.data.title;
+      if (section.subPages === null) {
+        section.subPages = [{ path: page.id, title, page }];
+      } else {
+        section.subPages.push({ path: page.id, title, page });
+      }
+    }
+  }
+
+  /* Finally, appropriately order the sections and subsections */
+  return [...Object.values(sectionMap)]
+    .map((section) => {
+      if (section.subPages !== null) {
+        section.subPages.sort(sortByNavOrderThenPath);
+      }
+      return section;
+    })
+    .toSorted(sortByNavOrderThenPath);
+}
+
+/**
+ * Sorting function for a record with a path and a (possible) page. Where
+ * the page exists and has a nav_order property, that will be used; in all
+ * other cases, the nav_order will be treated as Infinity and the path will
+ * be used to order navigation pages.
  */
 function sortByNavOrderThenPath(
-  a: { nav_order?: number | undefined; id: string },
-  b: { nav_order?: number | undefined; id: string }
+  a: { path: string; page: null | Page },
+  b: { path: string; page: null | Page }
 ): number {
-  const navA = a.nav_order ?? Infinity;
-  const navB = b.nav_order ?? Infinity;
+  const navA = a.page?.data.nav_order ?? Infinity;
+  const navB = b.page?.data.nav_order ?? Infinity;
   return navA < navB
     ? -1
     : navA > navB
       ? 1
-      : a.id < b.id
+      : a.path < b.path
         ? -1
-        : a.id > b.id
+        : a.path > b.path
           ? 1
           : 0;
 }
@@ -76,33 +107,36 @@ function sortByNavOrderThenPath(
 <nav>
   <ul id="navigation-list">
     {
-      orderdSections.map(({ title, id, subPages }) => (
-        <li class={Astro.props.current === id ? "current" : null}>
-          {subPages && (
-            <button
-              class={Astro.props.current.startsWith(id) ? "open" : "closed"}
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <use xlink:href="#svg-arrow-right" />
-              </svg>
-            </button>
-          )}
-          <a class="nav nav-top" href={id}>
-            {title}
-          </a>
-          {subPages && (
-            <ul class={Astro.props.current.startsWith(id) ? "open" : "closed"}>
-              {subPages.map((page) => (
-                <li class={Astro.props.current === page.id ? "current" : null}>
-                  <a class="nav nav-secondary" href={page.id}>
-                    {page.data.title}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
-        </li>
-      ))
+      orderedSections.map(({ title, path, subPages }) => {
+        const thisTopLevelIsCurrent = Astro.props.current === path;
+        const thisTopLevelIsInitiallyOpen =
+          Astro.props.current.startsWith(path);
+        return (
+          <li class={thisTopLevelIsCurrent ? "current" : null}>
+            {subPages && (
+              <button class={thisTopLevelIsInitiallyOpen ? "open" : "closed"}>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <use xlink:href="#svg-arrow-right" />
+                </svg>
+              </button>
+            )}
+            <a class="nav nav-top" href={path}>
+              {title}
+            </a>
+            {subPages && (
+              <ul class={thisTopLevelIsInitiallyOpen ? "open" : "closed"}>
+                {subPages.map(({ path, title }) => (
+                  <li class={Astro.props.current === path ? "current" : null}>
+                    <a class="nav nav-secondary" href={path}>
+                      {title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        );
+      })
     }
   </ul>
 </nav>
@@ -110,10 +144,8 @@ function sortByNavOrderThenPath(
 <script>
   const navigationList = document.getElementById("navigation-list")!;
   for (const nav of navigationList.children) {
-    console.log(nav);
     const button = nav.querySelector("button");
     const ul = nav.querySelector("ul");
-    console.log({ button, ul });
     if (button && ul) {
       button.onclick = () => {
         const toggled = button.className === "closed" ? "open" : "closed";
@@ -139,6 +171,7 @@ function sortByNavOrderThenPath(
     height: 2rem;
     cursor: pointer;
     color: var(--emph-color);
+    padding: 0.5rem;
   }
   button:hover {
     background-image: var(--hover-expander);
@@ -174,7 +207,7 @@ function sortByNavOrderThenPath(
   }
 
   a.nav-secondary {
-    color: var(--text-color);
+    color: var(--deemph-color);
     margin-left: 1rem;
   }
 

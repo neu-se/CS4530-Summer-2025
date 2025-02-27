@@ -1,8 +1,9 @@
 ---
 import Navigation from "../components/Navigation.astro";
 import "../assets/reset.css";
+import "../assets/markdown.css";
 
-const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
+const { COURSE_NUMBER, SEMESTER, COURSE_TITLE } = import.meta.env;
 ---
 
 <!doctype html>
@@ -32,7 +33,7 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
     <meta name="generator" content={Astro.generator} />
     <title>
       {
-        `${Astro.props.title} | ${Astro.props.home ? PUBLIC_TITLE : `${PUBLIC_COURSE}, ${PUBLIC_SEMESTER}`}`
+        `${Astro.props.title} | ${Astro.props.home ? COURSE_TITLE : `${COURSE_NUMBER}, ${SEMESTER}`}`
       }
     </title>
   </head>
@@ -102,9 +103,11 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
     </svg>
     <div id="leftpad"></div>
     <header id="label">
-      <a href={import.meta.env.BASE_URL}>{PUBLIC_COURSE}, {PUBLIC_SEMESTER}</a>
+      <a href={import.meta.env.BASE_URL}>{COURSE_NUMBER}, {SEMESTER}</a>
     </header>
-    <header id="search">Search {PUBLIC_COURSE}, {PUBLIC_SEMESTER}</header>
+    <header id="search">
+      <!-- todo: Search {PUBLIC_COURSE}, {PUBLIC_SEMESTER} -->
+    </header>
     <div id="rightpad"></div>
     <Navigation current={Astro.props.current} />
     <main>
@@ -128,12 +131,15 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
         arial,
         sans-serif;
       min-height: 100vh;
+      color: var(--text-color);
 
       --emph-color: #d41b2c;
-      --text-color: #5c5962;
-      --background: #fff;
+      --text-color: #27262b;
+      --deemph-color: #5c5962;
+      --grayed-color: #959396;
       --left-background: #f5f6fa;
-      --divider: 1px solid #eeebee;
+      --gray-ui-color: #eeebee;
+      --divider: 1px solid var(--gray-ui-color);
       --hover-left-background-image: linear-gradient(
         -90deg,
         #ebedf5 0%,
@@ -147,6 +153,10 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
       );
     }
 
+    .d-none {
+      display: none;
+    }
+
     #leftpad {
       grid-area: leftpad;
       background-color: var(--left-background);
@@ -154,7 +164,6 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
     }
     #rightpad {
       grid-area: rightpad;
-      background-color: var(--background);
     }
     #label {
       grid-area: label;
@@ -187,6 +196,7 @@ const { PUBLIC_COURSE, PUBLIC_SEMESTER, PUBLIC_TITLE } = import.meta.env;
     }
     main {
       grid-area: main;
+      padding: 2rem;
     }
 
     @media (width <= 66.5rem) {
