@@ -12,24 +12,14 @@ const { COURSE_NUMBER, SEMESTER, COURSE_TITLE } = import.meta.env;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <base href={`${import.meta.env.BASE_URL}/`} />
-    <link
-      rel="icon"
-      sizes="144x144"
-      type="image/png"
-      href="https://brand.northeastern.edu/global/assets/favicon/android-chrome-144x144.png?v=2"
-    />
-    <link
-      rel="icon"
-      sizes="32x32"
-      type="image/png"
-      href="https://brand.northeastern.edu/global/assets/favicon/favicon-32x32.png?v=2"
-    />
-    <link
-      rel="icon"
-      sizes="16x16"
-      type="image/png"
-      href="https://brand.northeastern.edu/global/assets/favicon/favicon-16x16.png?v=2"
-    />
+    <link rel="icon" sizes="144x144" type="image/png" href="neu-144x144.webp" />
+    <link rel="icon" sizes="32x32" type="image/png" href="neu-32x32.webp" />
+    <link rel="icon" sizes="16x16" type="image/png" href="neu-16x16.webp" />
+    {
+      Astro.props.description && (
+        <meta name="description" content={Astro.props.description} />
+      )
+    }
     <meta name="generator" content={Astro.generator} />
     <title>
       {

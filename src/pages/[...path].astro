@@ -30,12 +30,17 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
+const description =
+  page.data.layout === "home"
+    ? `${import.meta.env.SEMESTER} course home page for ${import.meta.env.COURSE_TITLE} at ${import.meta.env.INSTITUTION}, taught by ${import.meta.env.FACULTY}.`
+    : null;
 ---
 
 <Layout
   title={page.data.title}
   home={page.data.layout === "home"}
   current={page.id}
+  description={description}
 >
   {
     page.data.layout === "schedule" ? (

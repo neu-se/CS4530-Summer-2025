@@ -10,6 +10,8 @@ export default defineConfig({
       COURSE_NUMBER: envField.string({ context: "server", access: "public" }),
       COURSE_TITLE: envField.string({ context: "server", access: "public" }),
       SEMESTER: envField.string({ context: "server", access: "public" }),
+      FACULTY: envField.string({ context: "server", access: "public" }),
+      INSTITUTION: envField.string({ context: "server", access: "public" }),
     },
   },
 });

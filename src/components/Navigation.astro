@@ -114,7 +114,10 @@ function sortByNavOrderThenPath(
         return (
           <li class={thisTopLevelIsCurrent ? "current" : null}>
             {subPages && (
-              <button class={thisTopLevelIsInitiallyOpen ? "open" : "closed"}>
+              <button
+                class={thisTopLevelIsInitiallyOpen ? "open" : "closed"}
+                aria-label={`Toggle sub-pages of ${title}`}
+              >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <use xlink:href="#svg-arrow-right" />
                 </svg>
