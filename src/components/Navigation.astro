@@ -1,9 +1,202 @@
+---
+import { getCollection } from "astro:content";
+const pages = await getCollection("pages");
+
+const contentPages = pages
+  .filter((page) => page.data.layout !== "home")
+  .filter((page) => page.data.layout !== "page" || !page.data.nav_exclude);
+type Page = (typeof contentPages)[number];
+
+/* Collect contentPages into a section/subsection hierarchy */
+const sections: {
+  [section: string]: {
+    id: string;
+    nav_order?: number | undefined;
+    title: string;
+    page: null | Page;
+    subPages: null | Page[];
+  };
+} = {};
+for (const page of contentPages) {
+  // Get the top-level path and ensure it exists
+  const [first_, ...rest] = page.id.split("/");
+  const first = first_!; // First split always exists
+  if (!sections[first]) {
+    sections[first] = {
+      id: first!,
+      page: null,
+      title: first.replace(/^[a-z]/, (ch) => ch.toUpperCase()),
+      subPages: null,
+    };
+  }
+  const section = sections[first!]!;
+
+  if (rest.length === 0) {
+    section.nav_order = page.data.nav_order;
+    section.page = page;
+    section.title = page.data.title;
+  } else if (section.subPages === null) {
+    section.subPages = [page];
+  } else {
+    section.subPages.push(page);
+  }
+}
+
+/* Appropriately order the sections and subsections */
+const orderdSections = [...Object.values(sections)]
+  .map((section) => {
+    if (section.subPages !== null) {
+      section.subPages.sort(sortByNavOrderThenPath);
+    }
+    return section;
+  })
+  .toSorted(sortByNavOrderThenPath);
+
+/**
+ * Sorting function for a record with nav_order and id fields
+ */
+function sortByNavOrderThenPath(
+  a: { nav_order?: number | undefined; id: string },
+  b: { nav_order?: number | undefined; id: string }
+): number {
+  const navA = a.nav_order ?? Infinity;
+  const navB = b.nav_order ?? Infinity;
+  return navA < navB
+    ? -1
+    : navA > navB
+      ? 1
+      : a.id < b.id
+        ? -1
+        : a.id > b.id
+          ? 1
+          : 0;
+}
+---
+
 <nav>
-  <ul>
-    <li><a>Calendar</a><button>D</button></li>
-    <li><a>Modules</a><button>D</button></li>
-    <li><a>Assignments</a><button>D</button></li>
-    <li><a>Tutorials</a><button>D</button></li>
-    <li><a>Staff</a></li>
+  <ul id="navigation-list">
+    {
+      orderdSections.map(({ title, id, subPages }) => (
+        <li class={Astro.props.current === id ? "current" : null}>
+          {subPages && (
+            <button
+              class={Astro.props.current.startsWith(id) ? "open" : "closed"}
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use xlink:href="#svg-arrow-right" />
+              </svg>
+            </button>
+          )}
+          <a class="nav nav-top" href={id}>
+            {title}
+          </a>
+          {subPages && (
+            <ul class={Astro.props.current.startsWith(id) ? "open" : "closed"}>
+              {subPages.map((page) => (
+                <li class={Astro.props.current === page.id ? "current" : null}>
+                  <a class="nav nav-secondary" href={page.id}>
+                    {page.data.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </li>
+      ))
+    }
   </ul>
 </nav>
+
+<script>
+  const navigationList = document.getElementById("navigation-list")!;
+  for (const nav of navigationList.children) {
+    console.log(nav);
+    const button = nav.querySelector("button");
+    const ul = nav.querySelector("ul");
+    console.log({ button, ul });
+    if (button && ul) {
+      button.onclick = () => {
+        const toggled = button.className === "closed" ? "open" : "closed";
+        button.className = toggled;
+        ul.className = toggled;
+      };
+    }
+  }
+</script>
+
+<style>
+  nav {
+    padding-top: 3rem;
+    padding-bottom: 1rem;
+  }
+  button {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    color: var(--emph-color);
+  }
+  button:hover {
+    background-image: var(--hover-expander);
+  }
+
+  button.closed {
+    display: block;
+    transform: rotate(90deg);
+  }
+
+  button.open {
+    display: block;
+    transform: rotate(-90deg);
+  }
+
+  a.nav {
+    font-size: 0.875rem;
+    display: block;
+    text-decoration: none;
+    min-height: 2rem;
+    padding-block: 0.25rem;
+    display: grid;
+    align-items: center;
+    padding-inline: 2rem;
+  }
+
+  a.nav-top {
+    color: var(--emph-color);
+  }
+
+  a.nav:hover {
+    background-image: var(--hover-left-background-image);
+  }
+
+  a.nav-secondary {
+    color: var(--text-color);
+    margin-left: 1rem;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    position: relative;
+  }
+
+  li.current > a.nav {
+    font-weight: bold;
+    background-image: var(--hover-left-background-image);
+  }
+
+  ul.closed {
+    display: none;
+  }
+
+  ul.open {
+    display: block;
+  }
+</style>
