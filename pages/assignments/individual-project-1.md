@@ -1,0 +1,206 @@
+---
+layout: page
+title: Individual Project 1
+nav_order: 6
+---
+
+## Individual Project 1
+
+**Generative AI tools may not be used for this assignment and must be turned off in any code editors you are using. You are expected to make a good-faith attempt to avoid reliance on "AI Overview" features in search engines, and to verify anything you see there with authoritative sources.**
+
+The individual and group projects for this course place you in the role of the most recent hire at Strategy.Town, an interactive application for people who like multiplayer, turn-based strategy games. It recently received a large investment thanks due to its elevator pitch, "what if we had a version of Twitch, but for correspondence chess?"
+
+By the end of the semester, you'll propose, design, implement, and test new features for our project. We understand that some of you may have some web  development experience, but don't expect that most of you do, the goal of this first project is to get you up to speed with our existing codebase and development environment.
+
+## Objectives of this assignment
+
+The objectives of this assignment are to:
+
+- Get you familiar with the basics of TypeScript, VSCode, and the project codebase
+- Learn how to read and write code in TypeScript
+- Learn how to write unit tests with Vitest
+- Translate high-level requirements into code
+
+## Getting started
+
+Start by accepting our [TODO invitation TODO]. It will create a Github  repository for you which will include the starter code for this assignment.  In case you have enrolled in the course recently, you may not find your name  in the list. Please create a piazza post to contact us and we will add you to the Github Classroom roster.
+
+If you are new to Git or GitHub [TODO PROVIDE RESOURCE TODO].
+
+### Prerequisites
+
+You'll need to start by [setting up your development environment](tutorials/week1-getting-started), including installing node.js and npm.
+
+The starter code package, is divided into 3 main directories: _client_, _server_, and _shared_. These are connected in a single [workspace](https://docs.npmjs.com/cli/v7/using-npm/workspaces), but you shouldn't have to worry much about what that means.
+
+1. Navigate to the root directory of the repo.
+2. Install the dependencies:
+
+   ```
+   individual-project-1-me $> npm install
+   ```
+
+3. Start the server:
+
+   ```
+   individual-project-1-me $> cd server
+   server $> npm run dev
+   ```
+
+   You should then be able to visit <http://localhost:8000/> and get a message that tells you that you should be looking at elsewhere for the Vite frontend.
+
+4. ***Leave `npm run dev` running in the `./server` directory for the next step.*** 
+
+5. Open a new terminal window and start [Vite](https://vite.dev), which builds the frontend client:
+ 
+   ```
+   individual-project-1-me $> cd client
+   client $> npm run dev
+   ```
+
+   This will give you a url to go to, probably <http://localhost:4530/>. If you see a login page, then you're up and running. You can create a new user or use one of the four automatically-created username-password combinations: `user0/pwd0`, `user1/pwd1`, `user2/pwd2`, or `user3/pwd3`.
+
+### Understanding "the server"
+
+The code in the `server` directory is all TypeScript that is intended to be run on a web server. It's built on top of [express](https://expressjs.com/), a library used to create programs that accept and respond to HTTP requests. Express can do a lot of things, but we're only going using it to send and receive chunks of JSON-formatted data (line 20 of `sever/src/app.ts` tells the Express library to behave that way).
+
+#### HTTP GET requests
+
+Your web browser makes one kind of HTTP request, a GET request, whenever you type in a URL and hit ENTER. If you go to <http://localhost:8000/api/thread/list> while the server is running, you will see a bunch of JSON-formatted data. Line 38 of `server/src/app.ts` causes the request to that URL to be sent to the `getList` controller, which is just a function that is defined in `server/src/controllers/thread.controller.ts`.
+
+HTTP GET requests are supposed to just look up information. It is considered bad behavior if a HTTP GET requests changes something about the world. In the context of Strategy Town, a HTTP GET request shouldn't add a new comment, or create a new post, or initialize a new game.
+
+#### HTTP POST requests
+
+A HTTP POST request, on the other hand, sends information to and receive information, and may change things about the world. If you run this cURL command on while the server is running, it will make a new post that you can see if you go to the website's frontend.
+
+```
+curl --location 'localhost:8000/api/thread/create' \
+--header 'Content-Type: application/json' \
+--data '{
+    "auth": {
+        "username": "user3",
+        "password": "pwd3"
+    },
+    "payload": {
+        "title": "New Post",
+        "text": "Text goes here"
+    }
+}'
+```
+
+Line 37 of `server/src/app.ts` causes this request to be sent to the `postCreate` controller, which is also just a function defined in `server/src/controllers/thread.controller.ts`.
+
+You may find that it's easier to make HTTP POST requests from a tool like Postman: see our [Postman tutorial](tutorials/week1-apirequests-postman) for details. If you click the `</>` icon while developing a request, you can pick "cURL" from the dropdown menu and get a command-line snippet that performs the same request.
+
+#### Other HTTP requests
+
+There is a whole [vocabulary of HTTP requests](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but you only need to know about GET and POST for this class (and for most modern web development).
+
+### Understanding "the client"
+
+The code in the `client` directory is _mostly_ TypeScript that is intended to be run in a web browser. But web browsers don't know how to run TypeScript, they only know how to run JavaScript. While you're working on a project, it's important to be able to be able to look at what your code is doing in a web browser, and when you're done working on your project, all your code needs to be turned into a form that can get shipped to a web browser.
+
+Strategy Town uses [Vite](https://vite.dev) for this. Vite is a build tool — you use to preview the website you're building, and you use it to build the final website that you ship to users.
+
+### Shared code
+
+The TypeScript types in the `shared` directory are used by both the client and the server. The data sent by HTTP POST request to create a post has the TypeScript type `WithAuth<CreateThreadMessage>`, which, if you look at `shared/src/auth.types.ts` and `shared/src/thread.types.ts`, you can see expands to this TypeScript interface:
+
+```typescript
+type TypeOfPostRequest = {
+  auth: {
+    username: string;
+    password: string;
+  };
+  payload: {
+    title: string;
+    text: string;
+  };
+}
+```
+
+The client can use the `WithAuth<CreateThreadMessage>` type to ensure that it is sending a message with the right structure to the server. Because these types are described with [zod](https://zod.dev) schema validators, the server can use the same code to check that it received something with the right structure. (Usually the server gets things sent by the client, but as we saw, you can also use cURL to send random nonsense to the server. The server can't trust anything about the structure of information it receives from a HTTP request!)
+
+### Testing
+
+Unit tests for the server are in `server/tests/**/*.spec.ts`. These are written in [Vitest](https://vitest.dev), a tool discussed on the second day of class. (If you've used Jest, you should be good to go: Vitest is designed to be very similar.)
+
+You can test the server by going to the `server` directory and running `npm run test`. It can be very helpful to have tests rerun whenever you edit code, which you can do by running `npm run vitest`.
+
+## Recommendations when working on the project
+
+1. Open the client application in a browser and interact with it. While interacting, monitor the application tab in the browser’s developer tools. The application tab will give you information about the HTTP requests the client sends to the server. The HTTP requests will contain URIs in their headers. You can use this information to understand the endpoints in the server.
+2. Use Postman to interact with and manually test your solutions and verify that database queries work as expected.
+3. Make sure VS Code is set up as described in the [TODO development environment tutorial](tutorials/week1-getting-started), with ESLint, Typescript, and Prettier installed.
+4. Do not wait until the last minute to run `npm run lint` and `npm run build` to check for linter and typescript errors!
+5. Follow the [TODO debugging policy](policies/debugging) to help in the debugging process.
+
+## Tasks
+
+The tasks follow you through a fictional first week on the job at Strategy Town. 
+
+### Task 1: Frontend basics on Monday
+
+Get the site running in your development environment, and add a favicon.
+
+Download [this favicon](st-favicon.ico) and save it as `client/public/favicon.ico`. (Everything in the client/public directory gets served as-is on the website.) Open `client/index.html` and add `<link rel="icon" href="/favicon.ico" sizes="any" />` to the [document metadata](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/head) section.
+
+Now, when you have `npm run dev` running in both the `client` and `server` directories, you should be able to see the blue-and-green lightbulb icon at <http://localhost:4530> when you visit the website.
+
+### Task 2: Backend testing on Tuesday
+
+The Strategy Townies are trying to improve their testing — they are happy with the state of testing of `server/src/controllers/user.controller.ts` and `server/src/controllers/user.service.ts`, and their next priority is getting full test coverage of `server/src/controllers/thread.controller.ts`.
+
+By reading through the user and thread controllers, and comparing the user tests and the thread tests, add tests to at least get thread.controllers.ts to 100% line test coverage. For full credit, make sure thread.controllers.ts and thread.service.ts both have total coverage.
+
+### Task 3: Disaster strikes on Wednesday
+
+Oh no! An anonymous hacker posted to Twitter last week that they could change the password on someone else's Strategy Town account without knowing the password, and you just found out about it because nobody reads Twitter anymore. When contacted, they said that the only needed a valid account and a single post request to `/api/user/user2` to change the password of `user2`. They are demanding two million dollars for additional details.
+
+ - Show a cURL command that demonstrates the bug: change the password of `user2` even if you only know the password from `user3`. 
+ - Write a test that demonstrates this bug. Note that this test must initially be failing.
+ - Fix the bug and make the test succeed. (If you're changing more than a couple of lines, you're on the wrong track.)
+
+Remember that you can use a tool like Postman and then get the cURL command from Postman.
+
+### Task 4: Disaster strikes again on Thursday
+
+A security researcher at the University of Michigan emails `security@strategy.town` and lets you know that her new automated security vulnerability detection tool discovered that it was possible to *retrieve* the passwords of existing users by making a HTTP POST request to `/api/user/list`. She's submitting a paper on the tool on Saturday, so she intends to [responsibly disclose](https://en.wikipedia.org/wiki/Coordinated_vulnerability_disclosure) the bug late Friday. She'd give you more details if she had time, but she and her Ph.D. student are very busy with the paper.
+
+ - Show a cURL command that demonstrates the bug: reveal the password of `user0` and `user1`.
+ - Modify existing tests for this endpoint, or add new tests, to demonstrate this bug. Note that this test must initially be failing.
+ - Fix the bug and make the test succeed. (If you're changing more than a couple of lines, you're on the wrong track.)
+
+### Task 5: Debreifing on Friday
+
+ - An engineer on your team expresses distress about the second bug - the `/api/user/list` endpoint pretty clearly returns an object of type `SafeUserInfo`, and the whole point of `SafeUserInfo` is that it *doesn't* have a password field! What would you say to help your collegue understand the problem, and why they are confused?
+ - Another engineer is kind of freaking out about both bugs, the first one in particular. You get a slack message: "We had almost perfect test coverage! And the one branch that wasn't tested in the user controller had nothing to do with the bug! That should have made this kind of mistake impossible, right." What would you tell this collegue?
+ - The CTO is really worried about the fact that there were two bugs that affected security, and is having an afternoon meeting for everyone on the engineering team. The CEO is less concerned about why TypeScript and coverage checking *didn't* catch the problem; rather, they are under pressure to take corrective action for the future. Propose two *different* and reasonable ideas to the brainstorming suggestion that, if implemented, would have avoided this embarassing issue. Indicate which one you think would be the better short-term course of action for the company, taking into account that any change in people, processes, or programs will have to be navigated by dozens of software developers with their own priorities.
+
+Your responses here should be more than a few short sentences: answering them all in less than half a page of text is probably too short, and a full page for all of Task 5 is probably about right. Please don't write more than three pages total.
+
+### Task 6: Looking forward
+
+You have been tasked with implementing the following user story:
+
+"As a strategy game player who values social interactions, I want myself and other people on strategy.town to be able to share biographical details so that we can have a richer relationship to the people I interact with."
+
+ - Write 4-6 satisfaction critera for this user story. At least two must be "essential," at least one must be "desireable," and at least one must be "extension," as described [TODO here](tutorials/week1-user-stories).
+
+You have significant leeway in how to interpret this user story, just like you would in real life. You are not committing to implementing these satisfaction critera right now, but you will revise these user stories as part of the second individual project, and implementing them will be a major component of the third individual project. (Note that, in the third individual project and the third individual project ONLY, you will have the option of using generative AI tools like copilot as part of your software development process.)
+
+## Submission Instructions & Grading
+
+You will submit your code (task 1, task 2, and the last two parts of tasks 3&4) using GitHub Classroom, and the other parts of your assignment (the first part of tasks 3&4 and tasks 5 and 6) on Gradescope.
+
+The assignment is graded out of 60 points. 
+
+ - Task 1: 5 points
+ - Task 2: 10 points
+ - Task 3 & 4: 10 points each
+   - Half for tests, and half for the cURL demonstration and fix
+ - Task 5: 15 points
+ - Task 6: 10 points
+
+If your code fails the tests it comes with, or if it produces errors or warnings when `npm run build` or `npm run lint` is run in the `server` directory, you will get no credit on tasks 1-4 until you fix the error and resubmit with a 10 point penalty. Adding new `eslint-disable` statements is not allowed.
