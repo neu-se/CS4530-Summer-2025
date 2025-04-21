@@ -19,7 +19,7 @@ const pages = defineCollection({
       layout: z.literal("page"),
       title: z.string(),
       nav_exclude: z.optional(z.literal(true)),
-      nav_order: z.optional(z.number()),
+      "nav_order": z.optional(z.number()),
     }),
     z.object({
       layout: z.literal("module"),

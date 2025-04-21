@@ -1,0 +1,19 @@
+---
+layout: page
+title: "Title IX"
+nav_order: 2
+---
+
+*Title IX of the Education Amendments of 1972 protects individuals from sex or gender-based discrimination, including discrimination based on gender-identity, in educational programs and activities that receive federal financial assistance.*
+
+Northeastern's Title IX Policy prohibits Prohibited Offenses, which are defined as sexual harassment, sexual assault, relationship or domestic violence, and stalking. The Title IX Policy applies to the entire community, including students, faculty and staff of all gender identities.
+
+Faculty members are considered "responsible employees" at Northeastern University, meaning they are required to report all allegations of sex or gender-based discrimination to the Title IX Coordinator.
+
+If you or someone you know has been a survivor of a Prohibited Offense, ***confidential*** support and guidance can be found through [University Health and Counseling Services staff](http://www.northeastern.edu/uhcs/) and the [Center for Spiritual Dialogue and Service clergy members](http://www.northeastern.edu/spirituallife/). Those employees are not required by law to report allegations of sex or gender-based discrimination to the University, making them different than faculty members and other "responsibile employees" who are legally required to report.
+
+Alleged violations can be reported non-confidentially to the Title IX Coordinator within **The Office for Gender Equity and Compliance** at: [titleix@northeastern.edu](mailto:titleix@northeastern.edu) and/or through **NUPD** (Emergency 617.373.3333; Non-Emergency 617.373.2121). Reporting Prohibited Offenses to NUPD does **NOT** commit the victim/affected party to future legal action.
+
+In case of an emergency, please call 911.
+
+Please visit [www.northeastern.edu/ouec](https://www.northeastern.edu/ouec) for a complete list of reporting options and resources both on- and off-campus.

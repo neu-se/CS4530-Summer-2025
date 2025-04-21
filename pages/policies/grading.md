@@ -1,0 +1,38 @@
+---
+layout: page
+title: "Grading"
+nav_order: 1
+---
+
+Your grade in this course comes from:
+ - 30% Individual projects (6% for the first project, 12% for the second and third project)
+ - 40% Team project (including peer evaluation and surveys)
+ - 15% Class participation and practice activities
+ - 15% Midterm exam
+
+In addition, passing the course requires:
+
+ - a 50% score on at least two of the three individual projects
+ - a minimal score on the midterm (this threshold won't be higher than 50%, and may be lower)
+ - demonstration of success at software engineering (working with a group to create software features) and software development (actually writing code) through the final project
+ - participating in group presentations on the last two days of class (excused absences will need to do a make-up presentation)
+
+These four requirements are not intedned to be gotchas — they're intended to communicate that these are not optional parts of the course.
+
+Because this is an in-person course, you are expected to be available to work on the team project in person to pass the class.
+
+## Late homework
+
+Individual projects and practice activites can be turned in within 24 hours after the due date for a 10% penalty.
+
+## Assignment of team project grades
+
+In cases where team members do not equally contribute to the project, we may assign different grades to different individuals. This deduction will not be greater than 50% unless the student doesn't contribute enough to demonstrate success at software engineering and software development (which would make them unable to pass the course).
+
+We will evaluate each individual's contribution on the basis of a variety of factors, including progress reports at weekly meetings, through inspecting version control history, through each students' self-reflection, and through each students' peer evaluations during and after at the end of the project. We will make regular efforts to collect and distribute this feedback throughout the project.
+
+## Grading grievances
+
+If you have concerns regarding the grading of your work, please let us know within 2 class days. (Class days are Monday through Thursday: if you get work back on Monday the two days are Tuesday and Wednesday you must request a regrade by midnight Wednesday. If you get work back on a Wednesday the two days are Thursday and Monday and you must request a regrade by midnight Monday.)
+
+If your regrade request is closed and you feel that the response was not satisfactory, you may appeal to the instructor via email within 24 hours.

@@ -52,7 +52,6 @@ function createOrderedSectionHierarchy(pages: Page[]): {
     const section = sectionMap[first]!; // If-statement ensured this exists
 
     if (rest.length === 0) {
-      // This is the
       section.nav_order = page.data.nav_order;
       section.page = page;
       section.title = page.data.title;
