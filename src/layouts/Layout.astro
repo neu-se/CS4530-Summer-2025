@@ -12,9 +12,8 @@ const { COURSE_NUMBER, SEMESTER, COURSE_TITLE } = import.meta.env;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <base href={`${import.meta.env.BASE_URL}/`} />
-    <link rel="icon" sizes="144x144" type="image/png" href="neu-144x144.webp" />
-    <link rel="icon" sizes="32x32" type="image/png" href="neu-32x32.webp" />
-    <link rel="icon" sizes="16x16" type="image/png" href="neu-16x16.webp" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     {
       Astro.props.description && (
         <meta name="description" content={Astro.props.description} />
