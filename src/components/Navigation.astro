@@ -4,8 +4,8 @@ const pages = await getCollection("pages");
 
 // Filter out the home page and any pages that set the nav_exclude property
 const contentPages = pages
-  .filter((page) => page.data.layout !== "home")
-  .filter((page) => page.data.layout !== "page" || !page.data.nav_exclude);
+  .filter((page) => page.data.type !== "home")
+  .filter((page) => page.data.type !== "page" || !page.data.nav_exclude);
 type Page = (typeof contentPages)[number];
 
 const orderedSections = createOrderedSectionHierarchy(contentPages);
@@ -57,7 +57,7 @@ function createOrderedSectionHierarchy(pages: Page[]): {
       section.title = page.data.title;
     } else {
       const title =
-        page.data.layout === "module"
+        page.data.type === "module"
           ? `${page.data.nav_order} - ${page.data.title}`
           : page.data.title;
       if (section.subPages === null) {
