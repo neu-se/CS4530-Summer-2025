@@ -58,12 +58,13 @@ Inside of the repository, you'll see the following folders and files:
 └── package.json
 ```
 
-Here are a couple of the relevant:
+Here are a couple of the relevant facts:
 
-- Anything in the `public/` directory is placed, unprocessed, on the website.
+- Anything in the `public/` directory is placed, unprocessed, on the website. So that zip fill will be at `$PROJECT_ROOT/code/week1-unit-testing/jest-tutorial-starter-code.zip`.
 - The `src/` directory, along with the `astro.config.mjs` file, contain all the Astro configuration for the project. In most cases it should not be necessary to touch this configuration unless you're changing the site.
 - Each page in the `pages/` directory corresponds to a page on the site (with the same path, minus the `.md` extension). Astro is, in general, big on [file-based routing](https://docs.astro.build/en/basics/astro-pages/#file-based-routing).
 - The `.env` file contains site-wide configuration. If you're updating the website for a new semester, or adapting the repository for a new course, you'll need to update the values in this file.
+- The `src/` contains all the code for building the site, but hopefully shouldn't need to be messed with too much once it's set up.
 
 ### Links
 
