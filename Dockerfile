@@ -10,5 +10,6 @@ RUN npm ci
 # copy rest and build
 COPY . /code/.
 RUN npm run build
-RUN mkdir dist/CS4530-Summer-2025
-RUN mv dist/* dist/CS4530-Summer-2025
+RUN mv dist CS4530-Summer-2025
+RUN mkdir dist
+RUN mv CS4530-Summer-2025 dist
