@@ -11,9 +11,9 @@ export async function getStaticPaths() {
     props: { page: (typeof pages)[number] };
   }[];
 
-  const homePage = pages.find((page) => page.data.layout === "home");
+  const homePage = pages.find((page) => page.data.type === "home");
   const contentPages: ResultType = pages
-    .filter((page) => page.data.layout !== "home")
+    .filter((page) => page.data.type !== "home")
     .map((page) => ({ params: { path: page.id }, props: { page } }));
 
   return contentPages.concat(
@@ -31,23 +31,23 @@ export async function getStaticPaths() {
 const { page } = Astro.props;
 const { Content } = await render(page);
 const description =
-  page.data.layout === "home"
+  page.data.type === "home"
     ? `${import.meta.env.SEMESTER} course home page for ${import.meta.env.COURSE_TITLE} at ${import.meta.env.INSTITUTION}, taught by ${import.meta.env.FACULTY}.`
     : null;
 ---
 
 <Layout
   title={page.data.title}
-  home={page.data.layout === "home"}
+  home={page.data.type === "home"}
   current={page.id}
   description={description}
 >
   {
-    page.data.layout === "schedule" ? (
+    page.data.type === "schedule" ? (
       <Content />
-    ) : page.data.layout === "page" ? (
+    ) : page.data.type === "page" ? (
       <Content />
-    ) : page.data.layout === "module" ? (
+    ) : page.data.type === "module" ? (
       <Content />
     ) : (
       /* page.data.layout === "home" */ <Home>
