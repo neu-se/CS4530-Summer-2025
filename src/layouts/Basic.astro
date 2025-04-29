@@ -1,0 +1,16 @@
+---
+import { type PageData } from "../content.config";
+
+interface Props {
+  data: PageData;
+}
+
+const { data } = Astro.props;
+---
+
+<>
+  <h1>
+    {data.title}
+  </h1>
+  <article><slot /></article>
+</>

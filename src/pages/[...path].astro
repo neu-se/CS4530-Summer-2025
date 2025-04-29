@@ -1,31 +1,32 @@
 ---
 import { render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
-import { getCollection } from "astro:content";
 import Home from "../layouts/Home.astro";
+import {
+  type Page,
+  contentPages,
+  homePage,
+  extraDirectoryPages,
+} from "../sectionHierarchy";
+import Basic from "../layouts/Basic.astro";
 
 export async function getStaticPaths() {
-  const pages = await getCollection("pages");
-  type ResultType = {
+  type Result = {
     params: { path: string | undefined };
-    props: { page: (typeof pages)[number] };
-  }[];
+    props: { page: Page };
+  };
 
-  const homePage = pages.find((page) => page.data.type === "home");
-  const contentPages: ResultType = pages
-    .filter((page) => page.data.type !== "home")
-    .map((page) => ({ params: { path: page.id }, props: { page } }));
+  // All other pages will use file-based routing
+  const contentPageResults: Result[] = contentPages
+    .concat(extraDirectoryPages)
+    .map((page) => ({
+      params: { path: page.id },
+      props: { page },
+    }));
 
-  return contentPages.concat(
-    homePage
-      ? [
-          {
-            params: { path: undefined },
-            props: { page: homePage },
-          },
-        ]
-      : []
-  );
+  return contentPageResults.concat([
+    { params: { path: undefined }, props: { page: homePage } },
+  ]);
 }
 
 const { page } = Astro.props;
@@ -46,8 +47,12 @@ const description =
     page.data.type === "schedule" ? (
       <Content />
     ) : page.data.type === "page" ? (
-      <Content />
+      <Basic data={page.data}>
+        <Content />
+      </Basic>
     ) : page.data.type === "module" ? (
+      <Content />
+    ) : page.data.type === "directory" ? (
       <Content />
     ) : (
       /* page.data.layout === "home" */ <Home>
