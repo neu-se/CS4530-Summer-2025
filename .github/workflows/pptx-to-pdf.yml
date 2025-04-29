@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'public/slides/*.pptx'
+  workflow_dispatch:
 
 jobs:
   convert:
@@ -25,7 +26,7 @@ jobs:
 
     - name: Convert PPTX to PDF
       run: |
-        for file in $(git diff --name-only HEAD HEAD~5 | grep .pptx); do
+        for file in $(git diff --name-only HEAD HEAD~1 | grep .pptx); do
           libreoffice --headless --convert-to pdf "$file"
         done
 
