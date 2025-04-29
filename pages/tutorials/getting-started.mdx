@@ -46,13 +46,13 @@ Before starting the installation, make sure to kill your Visual Studio Code if y
    - This should display the version of nvm installed, like this:
    
      ![image](./getting-started/node/nvmw-verification.png)
-7. Install Node.js version 22 using the command `nvm install 22`.
-8. To use this version of NodeJS, run the command `nvm use 22`.
+7. Install Node.js version 23 using the command `nvm install 23`.
+8. To use this version of NodeJS, run the command `nvm use 23`.
 
    - The output will look like this:
 
      ```
-     Now using node v22.12.0 (npm v10.9.0)
+     Now using node v23.11.0 (npm v10.9.2)
      ```
 
 _Troubleshooting with VSCode_: Did you follow these instructions successfully, but find a "Command not found" error when you try to run `npm` in VSCode? Try this: Close VSCode completely. Re-open it. In your command shell in VSCode, try again. We have noticed that if you have VSCode open while installing `nvm`, it is possible that VSCode will not see the new software installation until it's closed and re-opened. You can also confirm that VSCode correctly sees the NodeJS installation by running `echo %PATH%` in your windows command shell in VSCode: it should include an entry similar to `C:\Program Files\nodejs`.
@@ -101,17 +101,17 @@ This tutorial assumes you're using the Bash or Zsh shells (if you don't know wha
 1. Open a shell (for Linux / Mac) or windows powershell/command prompt (for Windows).
 2. Run the command `node -v`
 
-- This should print the current version of nodeJS installed (22.x.x).
+- This should print the current version of nodeJS installed (23.x.x).
 
 3. Run the command `npm -v`
 
 - This should print the current version of npm installed (v10.x.x).
 - ![image](./getting-started/node/verification.png)
 
-4. If you find that some other version is being used, run the command `nvm use 22`. For Linux / Mac, you can change the default to 22 by running the command `nvm alias default 22`.
+4. If you find that some other version is being used, run the command `nvm use 23`. For Linux / Mac, you can change the default to 23 by running the command `nvm alias default 23`.
 
 > Note: The `alias` command is not compatible with `nvm.fish`. Instead, you can
-> add a default version with the command `exec nvm use 22` in your `~/.config/fish/config.fish` file.
+> add a default version with the command `exec nvm use 23` in your `~/.config/fish/config.fish` file.
 
 ## Installing Visual Studio Code (VSCode)
 
