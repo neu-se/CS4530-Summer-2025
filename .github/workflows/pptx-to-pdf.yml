@@ -1,0 +1,41 @@
+name: Convert PPTX to PDF
+
+on:
+  push:
+    paths:
+      - 'public/slides/*.pptx'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        pip install pypandoc
+        sudo apt-get install -y libreoffice
+
+    - name: Convert PPTX to PDF
+      run: |
+        for file in $(git diff --name-only HEAD HEAD~5 | grep .pptx); do
+          libreoffice --headless --convert-to pdf "$file"
+        done
+
+    - name: Add PDF to commit
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        for file in $(git diff --name-only HEAD HEAD~1 | grep .pptx); do
+          pdf_file="${file%.pptx}.pdf"
+          git add "$pdf_file"
+        done
+        git commit -m "Add converted PDF files"
+        git push
