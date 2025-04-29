@@ -152,7 +152,7 @@ By reading through the user and thread controllers, and comparing the user tests
 
 ### Task 3: Disaster strikes on Wednesday
 
-Oh no! An anonymous hacker posted to Twitter last week that they could change the password on someone else's Strategy Town account without knowing the password, and you just found out about it because nobody reads Twitter anymore. When contacted, they said that the only needed a valid account and a single post request to `/api/user/user2` to change the password of `user2`. They are demanding two million dollars for additional details.
+Oh no! An anonymous hacker posted to Twitter last week that they could change the password on someone else's Strategy Town account without knowing the password, and the company only just now found out about it because nobody reads Twitter anymore. When contacted via Twitter DMs, the hacker said that they only needed a valid account and a single post request to `/api/user/user2` to change the password of `user2`. They are demanding two million dollars for additional details.
 
  - Show a cURL command that demonstrates the bug: change the password of `user2` even if you only know the password from `user3`. 
  - Write a test that demonstrates this bug. Note that this test must initially be failing.
