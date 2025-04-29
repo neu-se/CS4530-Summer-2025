@@ -27,7 +27,7 @@ export const sectionHierarchy = createOrderedSectionHierarchy(
 function defaultTitle(id: string) {
   return id
     .split("-")
-    .map((str) => `${str[0]?.toUpperCase}${str.slice(1)}`)
+    .map((str) => `${str[0]?.toUpperCase()}${str.slice(1)}`)
     .join(" ");
 }
 

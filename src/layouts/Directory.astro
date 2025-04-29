@@ -1,0 +1,49 @@
+---
+import { type DirectoryData } from "../content.config";
+import { sectionHierarchy } from "../sectionHierarchy";
+
+interface Props {
+  data: DirectoryData;
+  id: string;
+  hasPage: boolean;
+}
+
+const { id, data, hasPage } = Astro.props;
+
+const subPages =
+  sectionHierarchy.find((section) => section.path === id)?.subPages ??
+  (() => {
+    throw new Error(
+      `Cannot make directory page for path ${id} since it is not in the section hierarchy`
+    );
+  })();
+
+console.log({ directory: hasPage });
+---
+
+<>
+  <h1>
+    {data.title}
+  </h1>
+  <article>
+    <div>
+      <ul>
+        {
+          subPages.map(({ path, title }) => (
+            <li>
+              <a href={path}>{title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    {
+      hasPage && (
+        <>
+          <hr />
+          <slot />
+        </>
+      )
+    }
+  </article>
+</>

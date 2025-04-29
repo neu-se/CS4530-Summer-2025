@@ -10,6 +10,13 @@ const zPageData = z.object({
   nav_order: z.optional(z.number()),
 });
 
+export type DirectoryData = z.infer<typeof zDirectoryData>;
+const zDirectoryData = z.object({
+  type: z.literal("directory"),
+  title: z.string(),
+  nav_order: z.optional(z.number()),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: "**/*.(md|mdx)", base: "./pages" }),
   schema: z.discriminatedUnion("type", [
@@ -19,9 +26,11 @@ const pages = defineCollection({
       nav_order: z.optional(z.number()),
     }),
     z.object({
-      type: z.literal("schedule"),
+      type: z.literal("calendar"),
       title: z.string(),
       nav_order: z.optional(z.number()),
+      start: z.date(),
+      calendar: z.any(),
     }),
     zPageData,
     z.object({
@@ -29,11 +38,7 @@ const pages = defineCollection({
       title: z.string(),
       nav_order: z.optional(z.number()),
     }),
-    z.object({
-      type: z.literal("directory"),
-      title: z.string(),
-      nav_order: z.optional(z.number()),
-    }),
+    zDirectoryData,
   ]),
 });
 

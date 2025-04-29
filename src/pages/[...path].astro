@@ -9,6 +9,8 @@ import {
   extraDirectoryPages,
 } from "../sectionHierarchy";
 import Basic from "../layouts/Basic.astro";
+import Directory from "../layouts/Directory.astro";
+import Calendar from "../layouts/Calendar.astro";
 
 export async function getStaticPaths() {
   type Result = {
@@ -44,8 +46,10 @@ const description =
   description={description}
 >
   {
-    page.data.type === "schedule" ? (
-      <Content />
+    page.data.type === "calendar" ? (
+      <Calendar data={page.data}>
+        <Content />
+      </Calendar>
     ) : page.data.type === "page" ? (
       <Basic data={page.data}>
         <Content />
@@ -53,7 +57,9 @@ const description =
     ) : page.data.type === "module" ? (
       <Content />
     ) : page.data.type === "directory" ? (
-      <Content />
+      <Directory id={page.id} data={page.data} hasPage={!!page.body}>
+        <Content />
+      </Directory>
     ) : (
       /* page.data.layout === "home" */ <Home>
         <Content />

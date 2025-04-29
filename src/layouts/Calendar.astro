@@ -1,0 +1,94 @@
+---
+const { data } = Astro.props;
+console.log(data);
+
+console.log(data.start);
+const startDate = new Date(data.start);
+startDate.setDate(startDate.getDate() - startDate.getDay());
+console.log({ s: data.start, g: startDate });
+
+const dayOfWeek = {
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+};
+
+const dateOptions = {
+  weekday: "short",
+  month: "long",
+  day: "numeric",
+};
+---
+
+<>
+  <h1>
+    {data.title}
+  </h1>
+  <article>
+    <slot />
+    <div class="table">
+      {
+        Object.entries(data.calendar).flatMap(([k, v]) => {
+          const weekOffset = parseInt(k);
+          return [<h2>Week {k}</h2>].concat(
+            Object.entries(v).map(([day, content]) => {
+              const calendarDay = new Date(startDate);
+              calendarDay.setDate(
+                calendarDay.getDate() + 7 * weekOffset + dayOfWeek[day]
+              );
+              return (
+                <div class="day">
+                  <h3>
+                    {calendarDay.toLocaleDateString("en-US", dateOptions)}
+                  </h3>
+                  {content.map((x) => (
+                    <div>
+                      {typeof x === "object" && "Due" in x
+                        ? `DUE: ${x.Due}`
+                        : typeof x === "object" && "Holiday" in x
+                          ? `HOLIDAY: ${x.Holiday}`
+                          : x}
+                    </div>
+                  ))}
+                </div>
+              );
+            })
+          );
+        })
+      }
+    </div>
+    {/* }<pre>{JSON.stringify(data.calendar, undefined, 3)}</pre> */}
+  </article>
+</>
+
+<style>
+  div.table {
+    display: grid;
+    grid-template-columns: max-content repeat(4, 1fr);
+    border-top: 1px solid black;
+    font-size: 0.9rem;
+  }
+  h2 {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    margin: 0;
+    font-size: inherit;
+    border-bottom: 1px solid black;
+  }
+  h3 {
+    font-size: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  div.day {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    line-height: 1rem;
+    gap: 0.4rem;
+    border-bottom: 1px solid black;
+  }
+</style>
