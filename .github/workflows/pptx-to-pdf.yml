@@ -34,9 +34,6 @@ jobs:
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
-        for file in $(git diff --name-only HEAD HEAD~1 | grep .pptx); do
-          pdf_file="${file%.pptx}.pdf"
-          git add "$pdf_file"
-        done
+        git add public/slides/*.pdf
         git commit -m "Add converted PDF files"
         git push
