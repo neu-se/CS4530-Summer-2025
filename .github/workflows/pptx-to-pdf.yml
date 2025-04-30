@@ -35,7 +35,7 @@ jobs:
         run: |
           ls public/slides | grep .pptx$ | while read file; do
             echo "converting $file"
-            libreoffice --headless --convert-to pdf "public/slides/$file"
+            soffice --headless --convert-to pdf "public/slides/$file"
           done
 
       - name: Add PDF to commit
