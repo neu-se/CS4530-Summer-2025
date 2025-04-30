@@ -23,7 +23,13 @@ jobs:
           cache-dependency-path: '.github/requirements.txt'
       - run: pip install -r .github/requirements.txt
 
-      - run: sudo apt-get install libreoffice-common libreoffice-writer
+      - name: Install LibreOffice
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libreoffice-common libreoffice-writer
+          version: 1.0      
+
+      # - run: sudo apt-get install libreoffice-common libreoffice-writer
 
       - name: Convert PPTX to PDF
         run: |
