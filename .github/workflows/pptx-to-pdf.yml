@@ -2,8 +2,6 @@ name: Convert PPTX to PDF
 
 on:
   push:
-    paths:
-      - "public/slides/*.pptx"
   workflow_dispatch:
 
 jobs:
