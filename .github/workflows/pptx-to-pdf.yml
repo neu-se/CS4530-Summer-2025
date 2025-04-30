@@ -28,7 +28,8 @@ jobs:
 
       - name: Convert PPTX to PDF
         run: |
-          for file in $(git diff --name-only HEAD HEAD~1 | grep .pptx); do
+          for file in $(git diff --name-only HEAD HEAD~1 | grep .pptx$); do
+            echo "converting $file"
             libreoffice --headless --convert-to pdf "$file"
           done
 
