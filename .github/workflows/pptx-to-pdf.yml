@@ -1,0 +1,48 @@
+name: Convert PPTX to PDF
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: libreoffice
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+          cache: "pip"
+          cache-dependency-path: '.github/requirements.txt'
+      - run: pip install -r .github/requirements.txt
+
+      - name: Install LibreOffice
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: default-jre libreoffice-java-common libreoffice-common libreoffice-writer
+          version: 1.0      
+
+      # - run: sudo apt-get install libreoffice-common libreoffice-writer
+
+      - name: Convert PPTX to PDF
+        run: |
+          cd public/slides
+          ls . | grep .pptx$ | while read file; do
+            echo "converting $file"
+            soffice --headless --convert-to pdf "$file"
+          done
+
+      - name: Add PDF to commit
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add public/slides/*.pdf
+          git commit -m "Add converted PDF files"
+          git push
