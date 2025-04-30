@@ -8,27 +8,22 @@ on:
 
 jobs:
   convert:
-    runs-on: ubuntu-latest
+    runs-on: linuxserver/libreoffice
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - uses: actions/setup-python@v2
         with:
           python-version: 3.9
-
-      - name: Install dependencies
-        run: |
-          pip install pypandoc
-          sudo apt-get install -y libreoffice
+          cache: "pip"
+      - run: pip install pypandoc
 
       - name: Convert PPTX to PDF
         run: |
-          git diff --name-only HEAD HEAD~1 | grep .pptx$ | while read $file do
+          git diff --name-only HEAD HEAD~1 | grep .pptx$ | while read $file do;
             echo "converting $file"
             libreoffice --headless --convert-to pdf "$file"
           done
