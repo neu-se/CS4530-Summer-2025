@@ -27,7 +27,7 @@ jobs:
 
       - name: Convert PPTX to PDF
         run: |
-          ls -la public/slides | grep .pptx$ | while read file; do
+          ls public/slides | grep .pptx$ | while read file; do
             echo "converting $file"
             libreoffice --headless --convert-to pdf "public/slides/$file"
           done
