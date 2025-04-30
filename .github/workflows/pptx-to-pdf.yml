@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+concurrency:
+  group: libreoffice
+
 jobs:
   convert:
     runs-on: ubuntu-latest
@@ -20,13 +23,15 @@ jobs:
           cache-dependency-path: '.github/requirements.txt'
       - run: pip install -r .github/requirements.txt
 
-      - name: Install dependencies
-        run: |
-          sudo apt-get install -y libreoffice
+      - name: Install LibreOffice
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libreoffice
+          version: 1.0      
 
       - name: Convert PPTX to PDF
         run: |
-          ls -la public/slides | grep .pptx$ | while read $file do;
+          ls -la public/slides | grep .pptx$ | while read $file; do
             echo "converting $file"
             libreoffice --headless --convert-to pdf "$file"
           done
