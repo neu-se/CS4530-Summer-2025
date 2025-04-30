@@ -33,9 +33,10 @@ jobs:
 
       - name: Convert PPTX to PDF
         run: |
-          ls public/slides | grep .pptx$ | while read file; do
+          cd public/slides
+          ls . | grep .pptx$ | while read file; do
             echo "converting $file"
-            soffice --headless --convert-to pdf "public/slides/$file"
+            soffice --headless --convert-to pdf "$file"
           done
 
       - name: Add PDF to commit
