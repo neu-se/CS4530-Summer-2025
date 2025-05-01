@@ -1,0 +1,43 @@
+---
+type: page
+title: "API Testing"
+nav_exclude: true
+---
+
+If you go to [this URL](https://robsimmons-nameseeingserver.web.val.run) your browser makes an HTTP GET request that will get a JSON response. That URL also accepts HTTP POST requests. It ALSO doesn't correctly validate its input. Being able to see the [source code](https://www.val.town/v/robsimmons/nameSeeingServer) will make this app easy to attack.
+
+This activity involves understanding the server by reading the woefully uncommented code and interacting with it with HTTP requests. One way to do this is with [Postman](tutorials/postman). You'll also try your hand at using [Zod](https://zod.dev/?id=objects) to describe the desired shape of input in a way that — unlike TypeScript types — can actually check whether inputs have the right shape.
+
+You'll hand in your assignment as a single TypeScript file on Gradescope; the template is below and you can also work on it [on val.town](https://esm.town/v/robsimmons/nameSeeingActivity).
+
+```typescript
+import { z } from "zod";
+
+/*
+TASK 1: Give three cURL commands that make HTTP requests to the URL
+https://robsimmons-nameseeingserver.web.val.run
+
+ - A GET request that returns 200
+ - A POST request that returns 200 and successfully adds a new name
+ - A request that returns status 500 (Internal server error)
+
+The code for that website is at
+https://www.val.town/v/robsimmons/nameSeeingServer
+
+*/
+
+/* TASK 2: What is the correct Zod type for verifying input to the POST 
+route? */
+const zPostBody = z.any();
+
+/* TASK 3: Give a Zod type describing the *response* to GET / requests */
+const zGetResponse = z.any();
+
+/* TASK 4: Give a Zod type describing the *response* to POST / requests when 
+the status is 200 */
+const zPostResponse = z.any();
+
+/* TASK 5: Give a Zod type describing the *response* to POST / requests when 
+the status is 400 or 403 */
+const zPostErrorResponse = z.any();
+```
