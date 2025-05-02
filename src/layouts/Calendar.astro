@@ -1,11 +1,8 @@
 ---
 const { data } = Astro.props;
-console.log(data);
 
-console.log(data.start);
 const startDate = new Date(data.start);
 startDate.setDate(startDate.getDate() - startDate.getDay());
-console.log({ s: data.start, g: startDate });
 
 const dayOfWeek = {
   Monday: 1,

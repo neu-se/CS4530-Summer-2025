@@ -17,6 +17,14 @@ const zDirectoryData = z.object({
   nav_order: z.optional(z.number()),
 });
 
+export type LectureData = z.infer<typeof zLectureData>;
+const zLectureData = z.object({
+  type: z.literal("lecture"),
+  title: z.string(),
+  nav_order: z.optional(z.number()),
+  lessons: z.optional(z.array(z.string())),
+});
+
 const pages = defineCollection({
   loader: glob({ pattern: "**/*.(md|mdx)", base: "./pages" }),
   schema: z.discriminatedUnion("type", [
@@ -32,12 +40,13 @@ const pages = defineCollection({
       start: z.date(),
       calendar: z.any(),
     }),
-    zPageData,
     z.object({
       type: z.literal("module"),
       title: z.string(),
       nav_order: z.optional(z.number()),
     }),
+    zPageData,
+    zLectureData,
     zDirectoryData,
   ]),
 });
