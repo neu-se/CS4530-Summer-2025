@@ -21,7 +21,7 @@ All materials in this repository (the lectures, assignments, and also the site i
 
 ### About this site
 
-This website is built using [Astro](https://astro.build/), a customizable framework for content-heavy static and dynamic sites (with an emphasis on static site generation). (As of 2025 when I'm creating this, Astro is a stable but currently-cool toolset. If you're reading this in the future and Astro is an ancient and unmaintainable mess, I'm sorry, it was inevitable, but at least everything's mostly markdown under the hood. - Rob Simmons)
+This website is built using [Astro](https://astro.build/), a customizable framework for content-heavy static and dynamic sites (with an emphasis on static site generation). (As of 2025 when I'm creating this, Astro is a stable but currently-trendy toolset. If you're reading this in the future and Astro is an ancient and unmaintainable mess, I'm sorry, it was inevitable, but at least everything's mostly markdown under the hood. - Rob Simmons)
 
 ### Local development environment
 
@@ -67,6 +67,25 @@ Here are a couple of the relevant facts:
 - Each page in the `pages/` directory corresponds to a page on the site (with the same path, minus the `.md` extension). Astro is, in general, big on [file-based routing](https://docs.astro.build/en/basics/astro-pages/#file-based-routing).
 - The `.env` file contains site-wide configuration. If you're updating the website for a new semester, or adapting the repository for a new course, you'll need to update the values in this file.
 - The `src/` contains all the code for building the site, but hopefully shouldn't need to be messed with too much once it's set up.
+
+### Concepts
+
+Mostly, the whole website is the contents of the `pages/` directory organized according to file-based routing. A few things are organized in more interesting ways:
+
+ - There has to be exactly one page with `type: "home"` somewhere in `pages/`.
+ - A page with `type: "assignment"` comes with a deadline, which appears on the calendar.
+ - Instruction is broken down into
+   - _Lessons_, are the atomic units of content for the website. Lessons are numbered `<module number>.<sequence number>`. 
+     - Lessons can be inferred from the presence of files in the `public/slides` directory that contain a lesson number. (In that case, the lesson name is the part that comes after the lesson number and before the extension.)
+     - Lessons can be specified and associated with learning goals in `modules.mdx`. 
+   - _Modules_, which describe the "chapters" of the course. All sections draw from the same modules. Information about modules is stored in YAML form in `modules.mdx` in the repository root, and is presented at the `/modules` route.
+   - _Lectures_, which describe the temporal order in which material is presented. Lectures are regular content pages of with `type: "lecture"`, and they include a list of lessons numbers . Different sections could have different lectures, or all the same lectures.
+   - TODO: announcements?
+
+Other page types are:
+
+ - `type: "calendar"` (TODO: describe schema)
+ - `type: "directory"` pages insert links to subpages
 
 ### Links
 
