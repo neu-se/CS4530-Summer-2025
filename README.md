@@ -47,9 +47,11 @@ Inside of the repository, you'll see the following folders and files:
 │   ├── home.md
 │   └── tutorials.md
 ├── public/
-│   └── code
-│       └── week1-unit-testing
-│           └── jest-tutorial-starter-code.zip
+│   ├── code
+│   │   └── week1-unit-testing
+│   │       └── jest-tutorial-starter-code.zip
+│   └── slides/
+│       └── Lesson 1.1 Course Introduction.pptx
 ├── src/
 │   ├── layouts/
 │   └── content.config.js

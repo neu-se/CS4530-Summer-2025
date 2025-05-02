@@ -1,0 +1,21 @@
+---
+import { type LectureData } from "../content.config";
+
+interface Props {
+  data: LectureData;
+}
+
+const { data } = Astro.props;
+console.log(data.lessons);
+console.log(import.meta.glob("../../public/slides/*"));
+
+const slidish = Object.keys(import.meta.glob("../../public/slides/Module *"));
+
+---
+
+<>
+  <h1>
+    {data.title}
+  </h1>
+  <article><slot /></article>
+</>

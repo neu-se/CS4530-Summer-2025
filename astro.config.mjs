@@ -23,7 +23,7 @@ export default defineConfig({
   },
 
   image: {
-    experimentalLayout: "responsive",
+    experimentalLayout: "constrained",
   },
 
   integrations: [mdx()],

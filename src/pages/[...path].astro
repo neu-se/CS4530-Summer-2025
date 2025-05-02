@@ -11,6 +11,7 @@ import {
 import Basic from "../layouts/Basic.astro";
 import Directory from "../layouts/Directory.astro";
 import Calendar from "../layouts/Calendar.astro";
+import Lecture from "../layouts/Lecture.astro";
 
 export async function getStaticPaths() {
   type Result = {
@@ -54,6 +55,10 @@ const description =
       <Basic data={page.data}>
         <Content />
       </Basic>
+    ) : page.data.type === "lecture" ? (
+      <Lecture data={page.data}>
+        <Content />
+      </Lecture>
     ) : page.data.type === "module" ? (
       <Content />
     ) : page.data.type === "directory" ? (
