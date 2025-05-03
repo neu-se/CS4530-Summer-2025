@@ -51,4 +51,12 @@ const pages = defineCollection({
   ]),
 });
 
-export const collections = { pages };
+const modules = defineCollection({
+  loader: glob({ pattern: "**/*.(md|mdx)", base: "./modules" }),
+  schema: z.object({
+    title: z.string(),
+    lessons: z.any(),
+  }),
+});
+
+export const collections = { pages, modules };
