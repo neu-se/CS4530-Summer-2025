@@ -15,7 +15,7 @@ for (const { id, data } of x) {
   }
   moduleData[num - 1] = {
     title: data.title,
-    lessons: data.lessons.map((lesson) => ({
+    lessons: (data.lessons ?? []).map((lesson) => ({
       title: lesson?.title,
       goals: lesson?.goals,
       files: [],
@@ -62,7 +62,7 @@ for (const slideFile of y) {
             </h3>
             {lesson.goals && (
               <>
-                <div>Learning goals:</div>
+                <div>The goal of this lesson is to prepare you to:</div>
                 <ul>
                   {lesson.goals.map((goal) => (
                     <li>{goal}</li>
