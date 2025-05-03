@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:23-slim
 
 WORKDIR /code
 
@@ -10,3 +10,6 @@ RUN npm ci
 # copy rest and build
 COPY . /code/.
 RUN npm run build
+RUN mv dist CS4530-Summer-2025
+RUN mkdir dist
+RUN mv CS4530-Summer-2025 dist
