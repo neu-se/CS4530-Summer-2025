@@ -1,0 +1,81 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { readdirSync } from "node:fs";
+
+const x = await getCollection("modules");
+const y = readdirSync("./public/slides");
+
+const moduleData = [];
+
+for (const { id, data } of x) {
+  const num = parseInt(id, 10);
+  if (isNaN(num)) {
+    throw new Error("Module filenames must begin with a number");
+  }
+  moduleData[num - 1] = {
+    title: data.title,
+    lessons: data.lessons.map((lesson) => ({
+      title: lesson?.title,
+      goals: lesson?.goals,
+      files: [],
+    })),
+  };
+}
+
+const q = [];
+for (const slideFile of y) {
+  const match = slideFile.match(/^[^0-9]*([0-9]+)(\.([0-9]+))?([^.]*)\.(.*)$/);
+  if (!match) continue;
+  const [_, moduleStr, _d, lessonStr, title, ext] = match;
+  const module = parseInt(moduleStr) - 1;
+  const lesson = parseInt(lessonStr) - 1;
+
+  moduleData[module] = moduleData[module] ?? {
+    lessons: [],
+  };
+  const lessonData = (moduleData[module].lessons[lesson] = moduleData[module]
+    .lessons[lesson] ?? { files: [] });
+  if (!lessonData.title) lessonData.title = title.trim();
+  lessonData.files.push([ext, `public/slides/${slideFile}`]);
+
+  q.push(match);
+}
+---
+
+<Layout title="Modules" current="modules">
+  {
+    moduleData.map((module, moduleNum) => (
+      <>
+        <h1>
+          Module {moduleNum + 1} {module.title && ` — ${module.title}`}
+        </h1>
+        {module.lessons.map((lesson, lessonNum) => (
+          <>
+            <h3>
+              {lesson.title ?? `Lesson ${lessonNum + 1}`}
+              {lesson.files.map(([ext, href]) => (
+                <>
+                  [<a href={href}>{ext.toUpperCase()}</a>]
+                </>
+              ))}
+            </h3>
+            {lesson.goals && (
+              <>
+                <div>Learning goals:</div>
+                <ul>
+                  {lesson.goals.map((goal) => (
+                    <li>{goal}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </>
+        ))}
+      </>
+    ))
+  }
+  <pre>
+        {JSON.stringify({x, y, moduleData, q}, undefined, 3)}
+    </pre>
+</Layout>
