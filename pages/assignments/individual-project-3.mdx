@@ -1,0 +1,100 @@
+---
+type: page
+title: Individual Project 3
+nav_order: 8
+deadline: 2025-05-26T22:00-04:00
+---
+
+**With the exception of tasks 1 and 5, you can choose whether or not to use generative AI tools for this assignment. The requirements and rubric are slightly different depending on whether you do so.**
+
+## Objectives of this assignment
+
+The objectives of this assignment are to:
+
+- Connect user requirements to code in a less structured way than previous assignments.
+- Work on features of your own scope and design.
+- If desired, explore the use of generative AI tools in programming.
+
+## Getting started
+
+Start by accepting our [TODO invitation TODO]. It will create a GitHub repository for you which will include the starter code for this assignment. You will set up the assignment as before.
+
+If you want to include additional dependencies, you may do so with permission from course staff. There will be a Piazza thread for such requests and listing allowed packages.
+
+## Tasks
+
+### Task 1: Opt-out user story
+
+**YOU CANNOT USE GENERATIVE AI FOR THIS TASK**
+
+You are given the following user story: "As a user, I want more control over my interactions with other participants." We'll call this user story 4, since the biographical-details-sharing user story was user story 0 and your group project defined user stories 1, 2, and 3.
+
+From this user story, you have been given the following conditions of satisfaction.
+
+ - 4.1: As a global setting, a user can opt-out of automatically joining chats when they watch or join a game (Essential).
+ - 4.2: Users who opt-out see a button that lets them join chat if they wish (Desirable).
+ - 4.3: The information about whether a user has opted out of automatically joining chats is never sent to any other user (eXtension).
+
+In a new file USER_STORY.md, give some feedback on this user story. Can you propose a user story that might do a better job achieving these conditions of satisfaction?
+
+### Task 2: Implement opt-out
+
+Implement the conditions of satisfaction for the opt-out user story.
+ 
+- If you're using generative AI, the first two CoS will be worth 40% of the score and the last one will be worth 20% points each.
+- If you're not using generative AI, the first two CoS will be weighted equally and the third is not required.
+
+Tests are encouraged but not required.
+
+### Task 3: Implement your user story
+
+In the first two assignments, you developed conditions of satisfaction for the following user story: "As a strategy game player who values social interactions, I want myself and other people on strategy.town to be able to share biographical details so that we can have a richer relationship with the people we play strategy games with."
+
+In this task, you will implement the features corresponding to this user story. GenAI users are expected to go a bit beyond the essential conditions of satisfaction. If you are not using GenAI, you are only required to complete your essential conditions of satisfaction.
+
+Tests are encouraged but not required.
+
+### Task 4: User communication
+
+In ANNOUNCEMENT_EMAIL.md, draft an email that would announce to strategy.town users the new features you have implemented, explaining how they should be accessed and used. 
+
+Keep in mind that you can put images in a draft! If your repository includes a file `images/option-selected.png`, putting `![image description](images/option-selected.png)` in `ANNOUNCEMENT_EMAIL.md` will display the image when the file is previewed on GitHub.
+
+The audience for this email is your end users, but keep in mind that TAs will use this email to help them understand what your new features are supposed to do, so a confusing or poorly-worded email may hurt your score for Tasks 2 and 3!
+
+### Task 5: Reflection (Gen AI users only)
+
+**YOU CANNOT USE GENERATIVE AI FOR THIS TASK**
+
+If you used generative AI as part of your assignment, how did it go? What tools specifically did you use? How much experience did you have with these tools? What went as expected? What surprised you? How much extra time did the assignment take, or how much time did you think you saved?
+
+## Submission Instructions & Grading 
+
+You will submit your code using GitHub Classroom. Your submission MUST include either a file in the root directory titled `NO_GEN_AI` or `YES_GEN_AI` detailing whether you used generative AI for tasks 2-4.
+
+The assignment is graded out of 120 points.
+
+Non-GenAI users:
+ - Task 1: 10 points
+ - Task 2: 40 points
+   - 30 points for 4.1
+   - 10 points for 4.2
+ - Task 3: 60 points (only essential conditions of satisfaction are required)
+ - Task 4: 20 points
+ - Task 5: not required
+
+GenAI users:
+ - Task 1: 10 points
+ - Task 2: 40 points
+   - 25 points for 4.1
+   - 10 points for 4.2
+   - 5 points for 4.3
+ - Task 3: 55 points
+   - Essential conditions of satisfaction: 35 points
+   - At least one non-essential condition of satisfaction: 10 points
+ - Task 4: 10 points
+ - Task 5: 15 points
+
+If your code fails the tests it comes with, or if it produces errors or warnings when `npm run check` or `npm run lint` is run in the `server` directory, you will get no credit on tasks 2 and 3 until you fix the error and resubmit with a 10 point penalty. Adding new `eslint-disable` statements, or modifying the linter configuration is not allowed. 
+
+Modifying `package.json` **is allowed**, but only with prior approval from course staff.
