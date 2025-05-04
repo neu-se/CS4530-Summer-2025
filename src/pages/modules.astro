@@ -4,7 +4,7 @@ import Layout from "../layouts/Layout.astro";
 import { readdirSync } from "node:fs";
 
 const x = await getCollection("modules");
-const y = readdirSync("./public/slides");
+const y = readdirSync("./public/handouts");
 
 const moduleData = [];
 
@@ -25,9 +25,9 @@ for (const { id, data } of x) {
 
 const q = [];
 for (const slideFile of y) {
-  const match = slideFile.match(/^[^0-9]*([0-9]+)(\.([0-9]+))?([^.]*)\.(.*)$/);
+  const match = slideFile.match(/^([^0-9~]*)([0-9]+)(\.([0-9]+))?([^.]*)\.(.*)$/);
   if (!match) continue;
-  const [_, moduleStr, _d, lessonStr, title, ext] = match;
+  const [_, label, moduleStr, _d, lessonStr, title, ext] = match;
   const module = parseInt(moduleStr) - 1;
   const lesson = parseInt(lessonStr) - 1;
 
@@ -37,7 +37,7 @@ for (const slideFile of y) {
   const lessonData = (moduleData[module].lessons[lesson] = moduleData[module]
     .lessons[lesson] ?? { files: [] });
   if (!lessonData.title) lessonData.title = title.trim();
-  lessonData.files.push([ext, `public/slides/${slideFile}`]);
+  lessonData.files.push([label.trim(), ext, `handouts/${slideFile}`]);
 
   q.push(match);
 }
@@ -55,9 +55,9 @@ for (const slideFile of y) {
             <h3>
               {moduleNum + 1}.{lessonNum + 1}
               {lesson.title ?? `Lesson ${lessonNum + 1}`}
-              {lesson.files.map(([ext, href]) => (
+              {lesson.files.map(([label, ext, href]) => (
                 <>
-                  [<a href={href}>{ext.toUpperCase()}</a>]
+                  [<a href={href}>{label} {ext}</a>]
                 </>
               ))}
             </h3>
@@ -76,7 +76,4 @@ for (const slideFile of y) {
       </>
     ))
   }
-  <pre>
-        {JSON.stringify({x, y, moduleData, q}, undefined, 3)}
-    </pre>
 </Layout>

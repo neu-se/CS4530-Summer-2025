@@ -55,14 +55,16 @@ const modules = defineCollection({
   loader: glob({ pattern: "**/*.(md|mdx)", base: "./modules" }),
   schema: z.object({
     title: z.string(),
-    lessons: z.array(
-      z
-        .object({
-          title: z.optional(z.string()),
-          goals: z.optional(z.array(z.string())),
-        })
-        .nullable()
-    ),
+    lessons: z
+      .array(
+        z
+          .object({
+            title: z.optional(z.string()),
+            goals: z.optional(z.array(z.string())),
+          })
+          .nullable()
+      )
+      .optional(),
   }),
 });
 
