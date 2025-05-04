@@ -68,24 +68,34 @@ Here are a couple of the relevant facts:
 - The `.env` file contains site-wide configuration. If you're updating the website for a new semester, or adapting the repository for a new course, you'll need to update the values in this file.
 - The `src/` contains all the code for building the site, but hopefully shouldn't need to be messed with too much once it's set up.
 
-### Concepts
+### Modules
 
-Mostly, the whole website is the contents of the `pages/` directory organized according to file-based routing. A few things are organized in more interesting ways:
+The website tries to adhere to file-based routing off the `pages/` directory. The big exception are _modules_. The [information architecture](https://en.wikipedia.org/wiki/Information_architecture) of the course looks like this:
 
- - There has to be exactly one page with `type: "home"` somewhere in `pages/`.
- - A page with `type: "assignment"` comes with a deadline, which appears on the calendar.
- - Instruction is broken down into
-   - _Lessons_, are the atomic units of content for the website. Lessons are numbered `<module number>.<sequence number>`. 
-     - Lessons can be inferred from the presence of files in the `public/slides` directory that contain a lesson number. (In that case, the lesson name is the part that comes after the lesson number and before the extension.)
-     - Lessons can be specified and associated with learning goals in `modules.mdx`. 
-   - _Modules_, which describe the "chapters" of the course. All sections draw from the same modules. Information about modules is stored in YAML form in `modules.mdx` in the repository root, and is presented at the `/modules` route.
-   - _Lectures_, which describe the temporal order in which material is presented. Lectures are regular content pages of with `type: "lecture"`, and they include a list of lessons numbers . Different sections could have different lectures, or all the same lectures.
-   - TODO: announcements?
+ - _Lessons_ are the atomic units of content. Slides and learning goals are associated with lessons.
+ - _Lectures_ are the way that lessons are presented temporally. In a multi-section course, different sections can share the same lectures, or use different lectures; each lecture covers some number of lessons.
+ - _Modules_ are the "chapters" of a course: thematic collections of lectures with a larger overarching goal. Just like with a textbook, lectures don't have to work through modules in any particular order.
 
-Other page types are:
+Modules, and the lessons in them, can be either:
 
- - `type: "calendar"` (TODO: describe schema)
- - `type: "directory"` pages insert links to subpages
+ - _Inferred_: the presence of a file `public/slides/Whatever 3.2 Name of Lesson.pptx` will tell the system that there is a module 3 with a lesson 2 titled "Name of Lesson."
+ - _Defined_: the presence of a file `modules/03.mdx` will define a sequence of lessons in this module. Lesson titles in this file will override inferred lesson titles.
+
+### Page types
+
+All files in the `pages/` directory have a `title`, an optional `nav_order` number, and an optional `nav_exclude` boolean. The last two control the appearance of the navigation menu.
+
+ - Top-level pages (`pages/*.mdx`) are part of primary navigation and default to `nav_exclude: false`.
+ - Second-level pages (`pages/*/*.mdx`) are part of secondary navigation and default to `nav_exclude: false`.
+ - Third-or-more level pages are part of secondary navigation but default to `nav_exclude: true`.
+
+There are several page types aside from `type: basic`.
+
+ - There has to be exactly one page with `type: home` somewhere in `pages/`
+ - `type: directory` must be a top-level page, and repeats the list of child pages that appear in navigation
+ - `type: assignment` comes with a `deadline`, which appears on the calendar
+ - `type: lecture` comes with an optional list of `lessons`, `<module>.<lesson>` numbers that are included in the page
+ - `type: calendar` describes a course calendar
 
 ### Links
 

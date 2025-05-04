@@ -16,7 +16,7 @@ export const contentPages: Page[] = pages.filter(
 
 export const sectionHierarchy = createOrderedSectionHierarchy(
   contentPages.filter((page) => {
-    if (page.data.type !== "page") return true;
+    if (page.data.type !== "basic") return true;
     if (page.data.nav_exclude === undefined) {
       return page.id.split("/").length <= 2;
     }
@@ -106,7 +106,15 @@ function createOrderedSectionHierarchy(pages: Page[]): {
   }
 
   /* Finally, appropriately order the sections and subsections */
-  return [...Object.values(sectionMap)]
+  return [
+    ...Object.values(sectionMap),
+    {
+      path: "modules",
+      title: "Modules",
+      nav_order: 10,
+      subPages: null,
+    },
+  ]
     .map((section) => {
       if (section.subPages !== null) {
         section.subPages.sort(sortByNavOrderThenPath);
@@ -123,11 +131,11 @@ function createOrderedSectionHierarchy(pages: Page[]): {
  * be used to order navigation pages.
  */
 function sortByNavOrderThenPath(
-  a: { path: string; page: null | Page },
-  b: { path: string; page: null | Page }
+  a: { path: string; page: null | Page, nav_order?: number },
+  b: { path: string; page: null | Page, nav_order?: number }
 ): number {
-  const navA = a.page?.data.nav_order ?? Infinity;
-  const navB = b.page?.data.nav_order ?? Infinity;
+  const navA = a.page?.data.nav_order ?? a.nav_order ?? Infinity;
+  const navB = b.page?.data.nav_order ?? b.nav_order ?? Infinity;
   return navA < navB
     ? -1
     : navA > navB
