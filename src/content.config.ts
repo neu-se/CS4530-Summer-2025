@@ -2,6 +2,15 @@ import { defineCollection, z } from "astro:content";
 
 import { glob } from "astro/loaders";
 
+export type AssignmentData = z.infer<typeof zAssignmentData>;
+const zAssignmentData = z.object({
+  type: z.literal("assignment"),
+  title: z.string(),
+  deadline: z.date(),
+  nav_exclude: z.optional(z.boolean()),
+  nav_order: z.optional(z.number()),
+});
+
 export type BasicData = z.infer<typeof zBasicData>;
 const zBasicData = z.object({
   type: z.literal("basic"),
@@ -40,11 +49,7 @@ const pages = defineCollection({
       start: z.date(),
       calendar: z.any(),
     }),
-    z.object({
-      type: z.literal("module"),
-      title: z.string(),
-      nav_order: z.optional(z.number()),
-    }),
+    zAssignmentData,
     zBasicData,
     zLectureData,
     zDirectoryData,
