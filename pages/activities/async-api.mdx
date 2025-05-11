@@ -1,0 +1,30 @@
+---
+type: basic
+title: "API Calls Using Async/Await"
+nav_exclude: true
+---
+
+Learning Objectives for this activity:
+
+- Practice applying asynchronous programming concepts: promises, async/await
+- Experiment with applying different ordering constraints in asynchronous code
+
+## Overview
+
+In this activity, you will experiment with asynchronous programming constructs in TypeScript.
+
+### Getting started
+
+Download the [starter code](code/async-activity.zip) and run `npm install`. Then run `node src/example.ts` to run some examples.
+
+### Stringing together async calls
+
+Your task is to complete the three `async` functions in `src/todo.ts`, `importGrades1`, `importGrades2`, and `importGrades3`. Each of these functions takes an input of the type `ImportTranscript[]`, creates a student record for each `ImportTranscript`, posts grades for each students, and then fetches and returns the stored transcripts for each student.
+
+You can test your implementations by running `node src/runner.ts`.
+
+The three implementations should each handle concurrency differently:
+
+1. Insert a student, insert each of their grades (sequentially in order), then insert the next student, then their grades, etc. until all students are inserted, then fetch transcripts.
+2. Insert a student, then insert each of their grades, then fetch their transcript (sequentially in order). Do this set of sequential operations concurrently for all students.
+3. Insert a student, then insert all of their grades concurrently, and do that concurrently for all students. After all students have all of their grades submitted, fetch all of the transcripts concurrently.
