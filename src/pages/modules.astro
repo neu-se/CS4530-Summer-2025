@@ -25,7 +25,9 @@ for (const { id, data } of x) {
 
 const q = [];
 for (const slideFile of y) {
-  const match = slideFile.match(/^([^0-9~]*)([0-9]+)(\.([0-9]+))?([^.]*)\.(.*)$/);
+  const match = slideFile.match(
+    /^([^0-9~]*)([0-9]+)(\.([0-9]+))?([^.]*)\.(.*)$/
+  );
   if (!match) continue;
   const [_, label, moduleStr, _d, lessonStr, title, ext] = match;
   const module = parseInt(moduleStr) - 1;
@@ -47,7 +49,7 @@ for (const slideFile of y) {
   {
     moduleData.map((module, moduleNum) => (
       <>
-        <h1>
+        <h1 id={`module${moduleNum + 1}`}>
           Module {moduleNum + 1} {module.title && ` — ${module.title}`}
         </h1>
         {module.lessons.map((lesson, lessonNum) => (
@@ -57,7 +59,11 @@ for (const slideFile of y) {
               {lesson.title ?? `Lesson ${lessonNum + 1}`}
               {lesson.files.map(([label, ext, href]) => (
                 <>
-                  [<a href={href}>{label} {ext}</a>]
+                  [
+                  <a href={href}>
+                    {label} {ext}
+                  </a>
+                  ]
                 </>
               ))}
             </h3>
@@ -77,3 +83,14 @@ for (const slideFile of y) {
     ))
   }
 </Layout>
+
+<style>
+  h1 {
+    margin-top: 1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  h1#module1 {
+    margin-top: 0;
+  }
+</style>

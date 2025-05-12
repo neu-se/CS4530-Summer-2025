@@ -1,0 +1,47 @@
+---
+import { type AssignmentData } from "../content.config";
+
+interface Props {
+  data: AssignmentData;
+}
+
+const { data } = Astro.props;
+const formatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  weekday: "short",
+  month: "long",
+  day: "numeric",
+  hour: "numeric",
+  minute: "numeric",
+});
+function format(date: Date) {
+  return formatter.format(date).replace(/ PM$/, "pm").replace(/ AM$/, "am");
+}
+---
+
+<>
+  <h1>
+    {data.title}{" "}
+    <strong id="deadline">Due {format(data.deadline)} Boston time</strong>
+  </h1>
+  <article><slot /></article>
+</>
+
+<style>
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.25;
+    display: flex;
+    align-items: center;
+  }
+  strong {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    margin-inline: 0.5rem;
+    background-color: var(--emph-color);
+    color: white;
+    border-radius: 0.55rem;
+    flex-shrink: 0;
+  }
+</style>
