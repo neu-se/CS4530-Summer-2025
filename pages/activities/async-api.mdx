@@ -28,3 +28,5 @@ The three implementations should each handle concurrency differently:
 1. Insert a student, insert each of their grades (sequentially in order), then insert the next student, then their grades, etc. until all students are inserted, then fetch transcripts.
 2. Insert a student, then insert each of their grades, then fetch their transcript (sequentially in order). Do this set of sequential operations concurrently for all students.
 3. Insert a student, then insert all of their grades concurrently, and do that concurrently for all students. After all students have all of their grades submitted, fetch all of the transcripts concurrently.
+
+Submit the file `src/todo.ts` on Gradescope.
