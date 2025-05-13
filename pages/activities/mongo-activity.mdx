@@ -6,7 +6,15 @@ nav_exclude: true
 
 In this activity, you'll work with asynchronous programming with the [Mongoose library](https://mongoosejs.com/), which allows your programs to connect to a [MongoDB database](https://www.mongodb.com/).
 
-The code for this implements a part of the TranscriptService we've seen previously in lecture. Currently, the tests fail because `getTranscript` doesn't return the correct result, and because `addGrade` isn't fully implemented.
+## Overview
+
+The code for this implements a part of the TranscriptService we've seen previously in lecture, but using a MongoDB database to store information.
+
+## Getting started
+
+Download the [starter code](code/mongo-activity.zip) and run `npm install`. Then run `npm run test`; there will be a lot of test failures. The tests fail because `getTranscript` doesn't return the correct result, and because `addGrade` isn't fully implemented. Your first task will be understanding the difference between what `getTranscript` _should_ be returning and what it's actually returning.
+
+## Fixing the tests
 
 To complete the task, you'll need to learn about how Mongoose models work a bit. There are multiple ways to work through this assignment, but the one that matches the structure of the strategy.town Mongoose models uses the `.populate()` and `.select()` methods to .
 
