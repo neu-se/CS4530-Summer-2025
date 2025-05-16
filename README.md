@@ -4,7 +4,7 @@ This repository contains the source for the website for Northeastern's CS4530, S
 
 ### Websites for prior versions of this class:
 
-- [Spring 2026](https://neu-se.github.io/CS4530-Spring-2025)
+- [Spring 2025](https://neu-se.github.io/CS4530-Spring-2025)
 - [Fall 2024](https://neu-se.github.io/CS4530-Fall-2024)
 - [Spring 2024](https://neu-se.github.io/CS4530-Spring-2024)
 - [Fall 2023](https://neu-se.github.io/CS4530-Fall-2023)
