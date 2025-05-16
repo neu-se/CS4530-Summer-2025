@@ -1,0 +1,98 @@
+===== src/useFormWithHooks.ts ================================
+
+import { FormEvent, useState } from 'react';
+
+export default function useApp() {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  const [response, setResponse] = useState<null | string>(null);
+  const [waiting, setWaiting] = useState<boolean>(false);
+
+  const handleClicked = async (e: FormEvent) => {
+    e.preventDefault();
+    //alert('clicked!');
+    setCount(count + 1);
+
+    setWaiting(true);
+    const response = await fetch(
+      'https://robsimmons-nameseeingserver.web.val.run',
+      {
+        method: 'POST',
+        body: JSON.stringify({ key: 'abracadabra', name }),
+      },
+    );
+
+    const { message } = await response.json();
+    setWaiting(false);
+    setResponse(message);
+  };
+
+  return { count, name, setName, waiting, response, handleClicked };
+}
+
+===== src/FormWithHooks.tsx ==================================
+
+import useFormWithHooks from './useFormWithHooks.ts';
+
+export default function FormWithHooks() {
+  const { count, name, setName, waiting, response, handleClicked } =
+    useFormWithHooks();
+
+  return (
+    <form>
+      <ol>
+        <li>First</li>
+        <li>Second</li>
+        <li>
+          You clicked the button {count} times, {name}!
+        </li>
+        {response && <li>{response}</li>}
+      </ol>
+      <div>
+        <input onChange={e => setName(e.target.value)} value={name} />
+      </div>
+      <button onClick={handleClicked}>Button</button>
+      {waiting && "I'm waiting"}
+    </form>
+  );
+}
+
+===== src/IdleGame.tsx =======================================
+
+import { useEffect, useState } from 'react';
+
+export default function IdleGame() {
+  const [count, setCount] = useState(0);
+  const [auto, setAuto] = useState(false);
+
+  useEffect(() => {
+    if (!auto) return;
+    let timer: number;
+
+    /** Clicks, waits one second, then calls itself */
+    function timedClick() {
+      setCount(oldCount => oldCount + 1);
+      timer = setTimeout(timedClick, 1000);
+    }
+    timer = setTimeout(timedClick, 1000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [auto]);
+
+  return (
+    <>
+      <ol>
+        <li>First</li>
+        <li>Second</li>
+        <li>You clicked the button {count} times!</li>
+      </ol>
+      <button onClick={() => setCount(count + 1)}>Button</button>
+      <br />
+      <button onClick={() => setAuto(!auto)}>
+        {auto ? 'Stop' : 'Start'} automatically clicking!
+      </button>
+    </>
+  );
+}
