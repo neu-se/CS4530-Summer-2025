@@ -1,0 +1,84 @@
+---
+type: assignment
+title: Individual Project 3
+nav_order: 8
+deadline: 2025-05-26T22:00:00Z
+---
+
+> **On tasks 2, 3, and 4, you can _choose_ whether or not to use generative AI tools such as Microsoft Copilot, Deepseek, or ChatGPT. Generative AI tools may not be used on Task 1 or Task 5. You will be expected to document and reflect on all the tools you use.**
+
+## Objectives of this assignment
+
+The objectives of this assignment are to:
+
+- Connect user requirements to code in a less structured way than previous assignments.
+- Work on features of your own scope and design.
+- If desired, explore the use of generative AI tools in programming.
+
+## Getting started
+
+Start by accepting our GitHub Classroom invitation — this will be available after 6pm on May 20. It will create a GitHub repository for you which will include the starter code for this assignment. You will set up the assignment as before.
+
+If you want to include additional dependencies (changing package.json), you may do so with permission from course staff. There will be a Piazza thread for such requests and listing allowed packages.
+
+## Tasks
+
+### Task 1: Opt-out user story
+
+> **YOU _MAY NOT_ USE GENERATIVE AI TOOLS FOR THIS TASK**
+
+You are given the following user story: "As a user, I want more control over my interactions with other participants." We'll call this user story 4, since the biographical-details-sharing user story was user story 0 and your group project defined user stories 1, 2, and 3.
+
+From this user story, you have been given the following conditions of satisfaction.
+
+ - 4.1: As a global setting that can be edited on the user's profile page, a user can opt-out of automatically joining chats when they watch or join a game. (Essential)
+ - 4.2: When a user who has opted out of joining chat navigates to a game page, they will not see the chat window or the contents of chat. (Essential)
+ - 4.3: When a user who has opted out of joining chat navigates to a game page, other users will not see that user as having joined the chat. (Essential)
+ - 4.4: A user on a game page who cannot see chat (due to opting out) can see a button that will let them join chat. (Desirable)
+ - 4.5: The information about whether a user has opted out of automatically joining chats is never sent to any other user (eXtension).
+ - 4.6: A user on a game page with chat open can press a button to close chat while still viewing the game. (eXtension)
+ - 4.7: When a user navigates away from a game page and then returns to it, the chat for that game will be in the same open/closed state that they left it in. (eXtension)
+
+In a new file USER_STORY.md, give some feedback on this user story. Can you propose a better user story that might do a better job setting up these conditions of satisfaction?
+
+### Task 2: Implement opt-out
+
+Implement the conditions of satisfaction for the opt-out user story from Task 1. Only the essential and desirable conditions are expected, and the essential ones will be given most of the weight in grading. You're not expected to implement the extension conditions of satisfaction. For example, it's fine if users who have opted out have to explicitly rejoin chat every time they visit a game page; that's part of condition of satisfaction 4.7, which you're not expected to implement.
+
+### Task 3: Implement your user story
+
+In the first two assignments, you developed conditions of satisfaction for the following user story: "As a strategy game player who values social interactions, I want myself and other people on strategy.town to be able to share biographical details so that we can have a richer relationship with the people we play strategy games with."
+
+In this task, you will implement the **essential** components of this user story only.
+
+Tests are encouraged but not required.
+
+### Task 4: User communication
+
+In `ANNOUNCEMENT_EMAIL.md`, draft an email that would announce to strategy.town users the new features you have implemented, explaining how they should be accessed and used. 
+
+Keep in mind that, while not required, you can put images in a markdown file! If your repository includes a file `images/option-selected.png`, putting `![image description](images/option-selected.png)` in `ANNOUNCEMENT_EMAIL.md` will display the image when the file is previewed on GitHub.
+
+The audience for this email is your end users, but keep in mind that course staff will use this announcement email to help them understand what your new features are supposed to do! A confusing or poorly-worded email may hurt your score for Tasks 2 and 3.
+
+### Task 5: Reflection
+
+> **YOU _MAY NOT_ USE GENERATIVE AI FOR THIS TASK**
+
+If you didn't use generative AI for the assignment, this can be pretty short: write a few sentences about why you decided not to.
+
+For everyone else, please write a couple of paragraphs about your experience. How did it go? What tools specifically did you use, and for which parts of the assignment (Task 2, Task 3, or Task 4) did you use generative AI tools to assist you? How much experience did you have with these tools before this assignment? What went as expected? What surprised you? How much time did you spend on the assignment, and how much do you think you would have spent without using these tools?
+
+## Submission Instructions & Grading 
+
+The assignment is graded out of 120 points.
+
+ - Task 1: 10 points
+ - Task 2: 35 points (10 points for each condition of satisfaction 4.1, 4.2, 4.3, and 5 points for 4.4)
+ - Task 3: 45 points (only essential conditions of satisfaction are required; your submission will be evaluated against your description in Task 4 and against your conditions of satisfaction from IP2)
+ - Task 4: 15 points
+ - Task 5: 15 points
+
+If your code fails the tests it comes with, or if it produces errors or warnings when `npm run check --workspaces` or `npm run lint --workspaces` is run in the root directory, you will get no credit on tasks 2-4 until you fix the error and resubmit with a 10 point penalty. Adding new `eslint-disable` statements, or modifying the linter configuration is not allowed. 
+
+Modifying `package.json` **is allowed**, but only with prior approval from course staff as described in the assignment.
