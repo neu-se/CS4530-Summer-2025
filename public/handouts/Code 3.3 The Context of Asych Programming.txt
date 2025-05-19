@@ -1,0 +1,53 @@
+// 1-sync.ts
+
+import { readFileSync, writeFileSync } from 'node:fs';
+
+function doThing() {
+  writeFileSync('file.txt', 'Hello Sync');
+  const CONTENTS = readFileSync('file.txt').toLocaleString('utf8');
+  console.log(CONTENTS);
+}
+doThing();
+
+// 2-callbacks.ts
+
+import { readFile, writeFile } from 'node:fs';
+
+writeFile('file.txt', 'Hello Callback', () => {
+  console.log("Okay I'm done");
+  readFile('file.txt', (error, contentsOfFile) => {
+    console.log(contentsOfFile.toLocaleString('utf-8'));
+  });
+});
+console.log('First or second?');
+
+// 3-promises.ts
+
+import { readFile, writeFile } from 'fs/promises';
+
+const thingPromise = writeFile('file.txt', 'Hello Promises')
+  .then(() => readFile('file.txt'))
+  .then(fileContents => console.log(fileContents.toLocaleString('utf-8')))
+  .catch(err => console.log(`There was an error ${err}`))
+  .finally(() => console.log('the very end'));
+console.log('This will run UNINTERRUPTED write after the write call is made');
+
+// I could at this point POLL thingPromise to keep asking it
+// "hey you done?"
+
+// 4-async.ts
+
+import { readFile, writeFile } from 'fs/promises';
+
+async function doThing() {
+  try {
+    const writePromise = writeFile('file.txt', 'Hello Async/Await');
+    console.log("This can't run until AFTER the file is written");
+    const contents = await readFile('file.txt');
+    console.log(contents.toLocaleString('utf-8'));
+    return contents;
+  } catch (e) {
+    console.log('Error!');
+  }
+}
+const result = doThing();

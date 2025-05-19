@@ -1,0 +1,103 @@
+===== index.html =============================================
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>The React Lecture</title>
+  </head>
+  <body>
+    <div id="root">Welcome to the React funtimes</div>
+    <script type="module" src="src/main.tsx"></script>
+  </body>
+</html>
+
+===== src/main.tsx ===========================================
+
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.tsx';
+
+const rootElement = document.getElementById('root');
+if (!rootElement) throw new Error('Bad');
+
+const reactRoot = createRoot(rootElement);
+
+/* 
+// First version 
+reactRoot.render(
+  React.createElement('ol', {}, [
+    React.createElement('li', {}, 'First'),
+    React.createElement('li', {}, 'Second'),
+  ]),
+);
+*/
+
+/*
+// Second version
+function doRender(x: number | null) {
+  reactRoot.render(
+    <ol>
+      {x && <li>{x}</li>}
+      <li>First</li>
+      <li>Second</li>
+    </ol>,
+  );
+}
+doRender(null);
+globalThis.doRender = doRender;
+*/
+
+reactRoot.render(<App />);
+
+===== src/App.tsx ============================================
+
+import { FormEvent, useState } from 'react';
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState('');
+  const [response, setResponse] = useState<null | string>(null);
+  const [waiting, setWaiting] = useState<boolean>(false);
+
+  const handleClicked = async (e: FormEvent) => {
+    e.preventDefault();
+    //alert('clicked!');
+    setCount(count + 1);
+
+    setWaiting(true);
+    const response = await fetch(
+      'https://robsimmons-nameseeingserver.web.val.run',
+      {
+        method: 'POST',
+        body: JSON.stringify({ key: 'abracadabra', name }),
+      },
+    );
+
+    const { message } = await response.json();
+    setWaiting(false);
+    setResponse(message);
+  };
+
+  return (
+    <form>
+      <ol>
+        <li>First</li>
+        <li>Second</li>
+        <li>
+          You clicked the button {count} times, {name}!
+        </li>
+        {response && <li>{response}</li>}
+      </ol>
+      <div>
+        <input onChange={e => setName(e.target.value)} value={name} />
+      </div>
+      <button onClick={handleClicked}>Button</button>
+      {waiting && "I'm waiting"}
+    </form>
+  );
+}
