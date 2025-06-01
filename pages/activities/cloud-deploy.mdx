@@ -1,0 +1,58 @@
+---
+type: basic
+title: "Deploying on the Cloud"
+nav_exclude: true
+---
+
+In this activity you'll work with your group through two ways of doing 
+
+## Deploying on NU's private cluster
+
+When the activity begins, we'll create a new pull request against everyone's group project, titled "Enable continuous deployment to cs4530su25.khoury.northeastern.edu." Go ahead and merge that PR.
+
+If you go to the Actions tab for your project repository, you'll first see the usual "Strategy Town CI" GitHub Action run; after it finishes, a new GitHub Action "Deploy to cs4530su25.khoury.northeastern.edu" will run and fail. Click on it to see the reason — the MONGODB_CONNECTION_STRING secret is not provided. (You'll have to pick one group member whose MongoDB database will be used for your group.)
+
+Go to the Settings tab for your project repository, and then go to "Secrets and variables" in the left navigation and select "Actions."
+
+Add a new repository secret: the name should be `MONGODB_CONNECTION_STRING` and the secret should be the MongoDB connection string you created in the [MongoDB Atlas activity](activities/mongo-atlas). 
+
+Go to the Actions tab, select "Deploy to cs4530su25.khoury.northeastern.edu" on the left, and then select "Run workflow," running it from the main branch. (The deploy job happens automatically whenever you merge to main and the tests pass, but it also can be run automatically like this.)
+
+GitHub will run the `build-container` job, which builds the website and creates a Docker container that gets pushed to Northeastern's internal "container registry." After that succeeds, it will run the `deploy-container` job. The "Deploy to Kubernetes using Helm" step gives you the URL of your website; this URL can only be accessed from on campus or via VPN.
+
+This website will not be created with sample forum posts or sample users; create a new account, and then you can view it on [MongoDB Atlas](https://cloud.mongodb.com/) by browsing collections; the collection name will be `strategy_town_khoury`. 
+
+## Deploying on render
+
+Render.com is a cloud platform that simplifies deploying and hosting web applications, APIs, and databases. It automatically manages servers, scaling, and security, allowing developers to easily build, deploy, and run applications without worrying about infrastructure management.
+
+You can create a Render.com account [here](https://dashboard.render.com/register). Clicking on the "GitHub" button and sign up using the **same GitHub account** as the one used to create the GitHub project repository.
+
+After you register you will be asked to verify your email. You might be asked to authorize the Render app for the "neu-cs4530" organization - choose your repository using the "Only select repositories" option, DO NOT choose "All repositories".
+
+1. Open the [Render Dashboard](https://dashboard.render.com/).
+2. Click on "Create new project", and create a new project with a name such as "cs4530-s25-XXXX" (where XXXX is your group name).
+2. Click on "Add new", and select "Web Service."
+   1. For the Source Code, choose your project repository. In case you do not see your project repository, go to your GitHub account and authorize access to your project repository.
+   2. For the Name, you can EITHER choose an unique name OR use a name such as "cs4530-s25-XXXX" (where XXXX is your group name).
+   3. For the Project, select the project created earlier. For the environment, select Production or any default value.
+   4. For Language, select "Node".
+   5. For Branch, select "main".
+   6. For Region, keep the default value.
+   7. Leave the "Root Directory" empty
+   8. For Build Command, type in `npm ci && npm run build -w=client`.
+   9. For Start Command, type in `npm start -w=server`.
+   10. For Instance Type, choose the "Free" option.
+   11. In the Environment Variables section, add two variables:
+      - `MONGODB_CONNECTION_STRING` should be the same connection string you've used before
+      - `MONGODB_DB_NAME` should be `strategy_town_khoury`
+      - `NODE_VERSION` should be `24.1.0`
+      
+      For the value, add the connection string of the MongoDB database created earlier. Make sure that you remove the trailing slash, if any.
+   12. If you need to change any of these, you can do so from the tab called "Settings" (or "Environment")
+4. Click "Deploy Web Service".
+
+You might see a warning like this after the server deployment:
+`Your free instance will spin down with inactivity, which can delay requests by 50 seconds or more.` When the app is not being used, Render will remove the container to save resources.
+
+If you deployed to NU's private cluster, you can now log in with the **same username and password** you created on the `cs4530su25.khoury.northeastern.edu` website. You've _kind of_ just horizontally scaled your application! Both web services use the same database, logins and forum posts work between them. Unfortunately, the way we use sockets for real-time communication does not work with multiple frontend servers; making this work would require what socket.io calls an [adapter](https://socket.io/docs/v4/adapter/).
