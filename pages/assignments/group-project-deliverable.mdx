@@ -42,6 +42,31 @@ Past semesters have had a "project poster" which you can see from the [spring 20
 
 *Submit on Gradescope.*
 
-## Grading 
+## Grading
 
-More detailed rubrics for these deliverables will (hopefully) be provided here later; these will be similar to the [rubric for the spring semester](https://neu-se.github.io/CS4530-Spring-2025/assignments/project-grading) with the exception that modifying ESLint rules that apply to _tests_ is absolutely permitted.
+The final deliverables count for 40% of your final project grade. This will be broken down as follows:
+
+### Minimum Viable Product (20%)
+
+### Additional Desirable Features (10%)
+
+Features must be deployed to a publicly-accessible URL (or on NU's private cloud) as outlined [in the in-class activity](https://neu-se.github.io/CS4530-Summer-2025/activities/cloud-deploy/), and should not raise any ESLint warnings or contain eslint-disable or ts-ignore flags. Changing the eslint settings for tests is allowed, changing the eslint settings for other code should be discussed with your TA.
+
+Satisfactory completion meets these conditions:
+
+ - Implemented features satisfy the conditions of satisfaction as proposed by the team and as agreed by the course staff. If technical difficulties resulted in features being dropped, the project may still earn full marks on “delivered features,” but these difficulties must have been with the course staff as you encountered them during development and must be documented in the final report.
+
+Minimally acceptable completion meets these conditions:
+
+ - Implemented features largely satisfy acceptance criteria as proposed by the team, but may not meet the course staff’s interpretation of those criteria.
+ - Implementation may have obvious flaws, but largely should work without crashing.
+
+### Testing (10%)
+
+The project must include some evidence of testing. On the backend, this should take the form of some suitable Vitest tests, and on the frontend these can take a variety of forms:
+
+ - Vitest test for suitably testable features
+ - Automated tests using Cypress, Storybook, or similar tools
+ - QA plan describing steps for walking through features and screenshots and detailed descriptions of expected outcomes
+
+Minimally acceptable testing covers at least some of the frontend and some of the backend features, and satisfactory testing covers all major implemented features on both the frontend and backend.
